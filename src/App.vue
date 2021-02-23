@@ -1,6 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <div>welcome to aloha!</div>
+  <div>welcome to aloha! this will become a real app soon.</div>
 </template>
 
 <script>
