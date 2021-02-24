@@ -1,13 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <div>welcome to aloha! this will become a real app soon.</div>
+  <Header />
+  <router-view />
 </template>
 
 <script>
 
+import Header from './components/Header';
+import firebaseConfig from './services/firebase';
+
 export default {
   name: 'App',
   components: {
+    Header
+  },
+  mounted() {
+    firebaseConfig.init();
   }
 }
 </script>
@@ -19,6 +26,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+body {
+  margin: 0;
 }
 </style>
