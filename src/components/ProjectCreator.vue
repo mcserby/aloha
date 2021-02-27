@@ -8,6 +8,8 @@
 
 <script>
 
+import firebaseService from '../services/firebaseService';
+
 export default {
   name: 'ProjectCreator',
   data() {
@@ -18,12 +20,16 @@ export default {
   components: {
   },
   computed: {
+    userId(){
+       return this.$store.state.userId;
+    }
   },
   methods: {
     async create(){
-      this.$store.commit('addProject', this.newProjectName);
-      const projectId = this.$store.state.projects.filter(p => p.name === this.newProjectName)[0].id;
-      this.$router.push({name: 'Project', params: {'projectId': projectId}})
+      const project = await firebaseService.addProject(this.newProjectName, this.userId);
+      console.log('project', project);
+      this.$store.commit('addProject', project);
+      this.$router.push({name: 'Project', params: {'projectId': project.id}})
     }
   }
 }

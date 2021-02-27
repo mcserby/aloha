@@ -6,7 +6,7 @@
 <script>
 
 import Header from './components/Header';
-import firebaseConfig from './services/firebase';
+import firebaseService from './services/firebaseService';
 
 export default {
   name: 'App',
@@ -14,7 +14,28 @@ export default {
     Header
   },
   mounted() {
-    firebaseConfig.init();
+    firebaseService.init();
+    firebaseService.setOnAuthStateChage(this.onAuthStateChange);
+  },
+  methods: {
+    async loadProjects(){
+      try {
+        const projects = await firebaseService.loadUserProjects();
+        projects.forEach(p => console.log('p:', p));
+        projects.forEach(p => this.$store.commit('addProject', p));
+      } catch(e){
+        console.error(e);
+      }
+    },
+    onAuthStateChange(user){
+        if (user) {
+          this.$store.commit('loginUser', user);
+          this.loadProjects();
+        } else {
+          this.$store.commit('logout');
+        }
+    }
+
   }
 }
 </script>

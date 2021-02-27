@@ -9,7 +9,7 @@
 
 <script>
 
-import firebase from '../services/firebase';
+import firebaseService from '../services/firebaseService';
 
 export default {
   name: 'Header',
@@ -25,11 +25,11 @@ export default {
   },
   methods: {
     async login(){
-      const loginResult = await firebase.loginWithGoogle();
+      const loginResult = await firebaseService.loginWithGoogle();
       this.$store.commit('loginUser', loginResult.user);
     },
     async logout(){
-      await firebase.signOut();
+      await firebaseService.signOut();
       this.$store.commit('logout');
     }
   }

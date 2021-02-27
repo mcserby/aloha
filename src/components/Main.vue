@@ -19,19 +19,12 @@ export default {
     Projects
 
   },
-  mounted(){
-    this.loadProjects();
-  },
   computed: {
     projects(){
        return this.$store.state.projects;
     }
   },
   methods: {
-    loadProjects(){
-      console.log('TODO: load projects from firebase');
-        // TODO
-    }
   }
 }
 </script>
