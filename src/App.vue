@@ -1,13 +1,41 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <div>welcome to aloha! this will become a real app soon.</div>
+  <Header />
+  <router-view />
 </template>
 
 <script>
 
+import Header from './components/Header';
+import firebaseService from './services/firebaseService';
+
 export default {
   name: 'App',
   components: {
+    Header
+  },
+  mounted() {
+    firebaseService.init();
+    firebaseService.setOnAuthStateChage(this.onAuthStateChange);
+  },
+  methods: {
+    async loadProjects(){
+      try {
+        const projects = await firebaseService.loadUserProjects();
+        projects.forEach(p => console.log('p:', p));
+        projects.forEach(p => this.$store.commit('addProject', p));
+      } catch(e){
+        console.error(e);
+      }
+    },
+    onAuthStateChange(user){
+        if (user) {
+          this.$store.commit('loginUser', user);
+          this.loadProjects();
+        } else {
+          this.$store.commit('logout');
+        }
+    }
+
   }
 }
 </script>
@@ -19,6 +47,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+body {
+  margin: 0;
 }
 </style>
