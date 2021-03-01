@@ -3,6 +3,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   init: function(){
@@ -55,6 +56,7 @@ export default {
       const db = firebase.firestore();
       const docRef = await db.collection("projects").add({
         name: projectName,
+        stages: [{id: uuidv4(), name:'default', questions: []}],
         owners: [userId]
       });
       const project = await db.collection("projects").doc(docRef.id).get()
@@ -71,6 +73,15 @@ export default {
     } catch(e){
       console.error(e);
     }
+  },
+
+  updateStages: async function(projectId, stages){
+    const db = firebase.firestore();
+    await db.collection("projects").doc(projectId).update({
+        stages: stages
+    });
+    const project = await db.collection("projects").doc(projectId).get()
+    return {id: project.id, ...project.data()};
   }
 
 }

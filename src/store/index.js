@@ -1,15 +1,13 @@
 import { createStore } from 'vuex'
 
-const dummyProjects =  [
-]
-
 const store = createStore({
     state () {
        return {
           isLoggedIn: false,
           userName: null,
           userId: null,
-          projects: dummyProjects
+          projects: [],
+          selectedStageId: null
        }
     },
     mutations: {
@@ -29,7 +27,19 @@ const store = createStore({
       deleteProject(state, projectId){
         const projectIndex = state.projects.findIndex(p => p.id === projectId);
         state.projects.splice(projectIndex, 1);
+      },
+      updateProject(state, project){
+          const projectIndex = state.projects.findIndex(p => p.id === project.id);
+          if(projectIndex >= 0){
+              state.projects.splice(projectIndex, 1, project);
+          } else {
+            state.projects.push(project);
+          }
+      },
+      selectStage(state, stageId){
+        state.selectedStageId = stageId;
       }
+
     }
   })
 

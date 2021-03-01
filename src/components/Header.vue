@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div>ALOHA!</div>
+    <div @click="$router.push({name: 'Main'})">ALOHA!</div>
     <div class="user-info">
       <span v-if="isLoggedIn">hello {{userName}}! <a @click="logout()">logout</a></span> <span v-else><a @click="login()">Login</a></span>
     </div>
