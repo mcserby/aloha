@@ -1,34 +1,40 @@
 <template>
   <div>
-    Stage Editor
+    Stage Editor: {{stage.name}}
+    <div>
+        <div v-for="question in stage.questions" v-bind:key="question.id">
+          <Question :question="question" @update-question="updateQuestion"/>
+        </div>
+        <div>
+          <button @click="$emit('addNewQuestion')">New Question</button>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
 
+import Question from './Question';
+
 export default {
   name: 'StageEditor',
+  props: ['stage'],
+  components: {
+    Question
+  },
   data() {
     return {
     }
   },
-  components: {
-  },
   computed: {
   },
   methods: {
+    updateQuestion(q){
+      this.$emit('updateQuestion', q);
+    }
   }
 }
 </script>
 
 <style>
-.stage {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-gap: 1rem;
-  font-size:1em;
-  grid-template-columns: repeat(2, 1fr);
-}
-
 </style>
