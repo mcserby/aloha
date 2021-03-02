@@ -11,7 +11,7 @@
         <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage" @delete-stage="deleteStage"/>
       </div>
       <div class="stage-editor-container">
-        <StageEditor :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
+        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
       return route;
     },
     project(){
-      return this.$store.state.projects.filter(p => p.id === this.projectId)[0];
+      return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
     stages(){
       return this.project.stages;
@@ -116,7 +116,7 @@ export default {
   display: grid;
   grid-gap: 1rem;
   font-size:1em;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 2fr;
 }
 
 .stage-selector-container {

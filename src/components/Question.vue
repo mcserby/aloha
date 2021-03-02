@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-      Question: <textarea v-model="currentText" />
+      Q: <textarea v-model="currentText" />
     <div>
     </div>
-      Answer:  <textarea v-model="currentAnswer" />
+      A: <textarea v-model="currentAnswer" />
     </div>
     <div>
       <button @click="updateQuestion()">Update Question</button>
@@ -40,4 +40,8 @@ export default {
 </script>
 
 <style>
+textarea {
+  width: 90%;
+  height: 100%;
+}
 </style>

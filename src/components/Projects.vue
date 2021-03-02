@@ -14,6 +14,7 @@
 
 <script>
 
+
 export default {
   name: 'Main',
   props: ['projects'],
