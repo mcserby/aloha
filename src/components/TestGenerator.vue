@@ -4,7 +4,7 @@
        Number of tests: <input type="text" v-model="numberOfTests" />
     </div>
     <div>
-      <button @click="generateTests()">Generate Tests</button>
+      <button @click="generateTests()">Generate Tests</button>  <button @click="clearTestsForProject()">Clear all tests</button>
     </div>
     <div>
       <div>Generated Tests:</div>
@@ -40,9 +40,10 @@ export default {
   methods: {
     async generateTests(){
       try {
-        console.log('numberOfTests', this.numberOfTests);
-        const tests = [...Array(this.numberOfTests).keys()].map(() => this.generateTest());
-        console.log('tests', tests);
+        const tests = [];
+        for(let i = 0; i < this.numberOfTests; i++){
+          tests.push(this.generateTest());
+        }
         await firebaseService.storeTests(tests);
         await this.loadProjectTestIds();
       }catch(e){
@@ -53,10 +54,13 @@ export default {
       const testIds = await firebaseService.loadTestIds(this.project.id);
       this.$store.commit('updateTestIds', testIds);
     },
+    async clearTestsForProject(){
+      await firebaseService.clearTestsForProject(this.project.id);
+      this.$store.commit('updateTestIds', []);
+    },
     generateTest(){
       const testQuestions = this.project.stages.map(s => {
         const pos = this.getRandomInt(s.questions.length);
-        console.log('pos', pos);
         return JSON.parse(JSON.stringify(s.questions[pos]));
       });
       return {
