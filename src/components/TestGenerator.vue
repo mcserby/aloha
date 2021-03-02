@@ -29,6 +29,9 @@ export default {
   },
   components: {
   },
+  mounted(){
+    this.loadProjectTestIds();
+  },
   computed: {
     testIds(){
       return this.$store.state.testIds;
@@ -37,6 +40,7 @@ export default {
   methods: {
     async generateTests(){
       try {
+        console.log('numberOfTests', this.numberOfTests);
         const tests = [...Array(this.numberOfTests).keys()].map(() => this.generateTest());
         console.log('tests', tests);
         await firebaseService.storeTests(tests);

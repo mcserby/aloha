@@ -15,7 +15,7 @@
       </div>
     </div>
     <div>
-      <TestGenerator :project="project" />
+      <TestGenerator v-if="projectIsLoaded" :project="project" />
     </div>
   </div>
 </template>
@@ -47,6 +47,9 @@ export default {
       const route =  this.$route.params.projectId;
       console.log('route:', route);
       return route;
+    },
+    projectIsLoaded(){
+      return this.project.id !== undefined;
     },
     project(){
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
