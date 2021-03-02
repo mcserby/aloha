@@ -14,6 +14,9 @@
         <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
       </div>
     </div>
+    <div>
+      <TestGenerator :project="project" />
+    </div>
   </div>
 </template>
 
@@ -22,6 +25,7 @@
 import firebaseService from '../services/firebaseService';
 import StageSelector from './StageSelector';
 import StageEditor from './StageEditor';
+import TestGenerator from './TestGenerator';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -35,7 +39,8 @@ export default {
   },
   components: {
     StageSelector,
-    StageEditor
+    StageEditor,
+    TestGenerator
   },
   computed: {
     projectId(){

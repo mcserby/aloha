@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Main from "@/components/Main.vue";
 import Project from "@/components/Project.vue";
 import ProjectCreator from "@/components/ProjectCreator.vue";
+import Test from "@/components/Test.vue";
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     path: "/project/new",
     name: "ProjectCreator",
     component: ProjectCreator,
+  },
+  {
+    path: "/test/:testId",
+    name: "Test",
+    component: Test,
   },
 ];
 

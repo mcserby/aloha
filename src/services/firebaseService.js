@@ -82,6 +82,39 @@ export default {
     });
     const project = await db.collection("projects").doc(projectId).get()
     return {id: project.id, ...project.data()};
+  },
+
+  storeTests: async function(tests){
+    var db = firebase.firestore();
+    var batch = db.batch();
+
+    tests.forEach((test) => {
+      batch.set(db.collection('tests').doc(), test);
+    });
+    await batch.commit();
+  },
+
+  loadTestIds: async function(projectId){
+    try {
+      const db = firebase.firestore();
+      const tests = await db.collection("tests")
+        .where("projectId", "==", projectId)
+        .get();
+      const results = [];
+      tests.forEach(t => results.push(t.id));
+      return results;
+    } catch(e){
+      console.error(e);
+    }
+  },
+
+  loadTest: async function(testId){
+      const db = firebase.firestore();
+      const test = await db.collection("tests").doc(testId).get();
+      return {id: test.id, ...test.data()};
   }
+
+
+
 
 }
