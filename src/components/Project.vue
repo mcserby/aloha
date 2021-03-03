@@ -101,7 +101,7 @@ export default {
     },
     async addNewQuestion(){
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
-      currentStageCopy.questions.push({id: uuidv4(), text: 'question', answer: 'answer'});
+      currentStageCopy.questions.push({id: uuidv4(), text: 'question', answer: 'answer', solution: 'solution'});
       await this.updateStages(currentStageCopy);
     },
     async updatedQuestion(question){

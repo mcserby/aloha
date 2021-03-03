@@ -3,7 +3,7 @@
     Stage Editor: {{stage.name}}
     <div>
         <div v-for="question in stage.questions" v-bind:key="question.id">
-          <Question :question="question" @update-question="updateQuestion"/>
+          <Question :question="question" @update-question="updateQuestion" :showSolution="true"/>
         </div>
         <div>
           <button @click="$emit('addNewQuestion')">New Question</button>

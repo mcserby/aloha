@@ -61,7 +61,9 @@ export default {
     generateTest(){
       const testQuestions = this.project.stages.map(s => {
         const pos = this.getRandomInt(s.questions.length);
-        return JSON.parse(JSON.stringify(s.questions[pos]));
+        let testQuestion = JSON.parse(JSON.stringify(s.questions[pos]));
+        delete testQuestion.solution;
+        return testQuestion;
       });
       return {
         projectId: this.project.id,
