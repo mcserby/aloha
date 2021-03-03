@@ -124,6 +124,30 @@ export default {
     testIds.forEach((id) => {
       db.collection("tests").doc(id).delete();
     });
+  },
+
+  submitSolution: async function(solution){
+    try {
+      console.log('submitSolution:', solution);
+      const db = firebase.firestore();
+      await db.collection("solutions").add(solution);
+    } catch(e){
+      console.error(e);
+    }
+  },
+
+  loadSolutions: async function(projectId){
+    try {
+      const db = firebase.firestore();
+      const tests = await db.collection("solutions")
+        .where("projectId", "==", projectId)
+        .get();
+        const results = [];
+        tests.forEach(t => results.push({id: t.id, ...t.data()}));
+        return results;
+    } catch(e){
+      console.error(e);
+    }
   }
 
 }

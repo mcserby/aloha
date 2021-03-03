@@ -56,12 +56,23 @@ export default {
     updateQuestion(q){
       console.log('updateQuestion', q);
     },
-    submitSolution(){
-      console.log('solution:', JSON.stringify({
+    async submitSolution(){
+      const questionsCopy = JSON.parse(JSON.stringify(this.test.questions));
+      const newQuestions = questionsCopy.map(q => new Object({
+        id: q.id,
+        text: q.text,
+        answer: q.answer,
+        score: -1
+      }));
+      const solution = new Object({
+        testId: this.test.id,
+        projectId: this.test.projectId,
         firstName: this.firstName,
         secondName: this.secondName,
-        questions: this.test.questions
-      }));
+        questions: newQuestions
+      });
+      await firebaseService.submitSolution(solution);
+      this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
     }
   }
 }

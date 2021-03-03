@@ -8,7 +8,8 @@ const store = createStore({
           userId: null,
           projects: [],
           selectedStageId: null,
-          testIds: []
+          testIds: [],
+          solutions: [],
        }
     },
     mutations: {
@@ -42,6 +43,9 @@ const store = createStore({
       },
       updateTestIds(state, testIds){
         state.testIds.splice(0, state.testIds.length, ...testIds);
+      },
+      updateSolutions(state, solutions){
+        state.solutions.splice(0, state.solutions.length, ...solutions);
       }
 
     }

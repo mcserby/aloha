@@ -14,6 +14,9 @@
         <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
       </div>
     </div>
+    <div v-if="projectIsLoaded">
+      <router-link :to="{name: 'Solutions', params: {'projectId': this.project.id}}">Go to Solutions</router-link>
+    </div>
     <div>
       <TestGenerator v-if="projectIsLoaded" :project="project" />
     </div>
@@ -101,7 +104,12 @@ export default {
     },
     async addNewQuestion(){
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
-      currentStageCopy.questions.push({id: uuidv4(), text: 'question', answer: 'answer', solution: 'solution'});
+      currentStageCopy.questions.push({
+        id: uuidv4(),
+        text: 'question',
+        answer: 'answer',
+        solution: 'solution'
+      });
       await this.updateStages(currentStageCopy);
     },
     async updatedQuestion(question){
