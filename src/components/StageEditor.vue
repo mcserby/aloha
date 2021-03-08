@@ -3,7 +3,7 @@
     Stage Editor: {{stage.name}}
     <div>
         <div v-for="question in stage.questions" v-bind:key="question.id">
-          <Question :question="question" @update-question="updateQuestion" :showSolution="true"/>
+          <Question :question="question" @update-question="updateQuestion" @delete-question="deleteQuestion" :showSolution="true"/>
         </div>
         <div>
           <button @click="$emit('addNewQuestion')">New Question</button>
@@ -31,6 +31,9 @@ export default {
   methods: {
     updateQuestion(q){
       this.$emit('updateQuestion', q);
+    },
+    deleteQuestion(id){
+      this.$emit('deleteQuestion', id);
     }
   }
 }

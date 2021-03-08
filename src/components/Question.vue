@@ -10,7 +10,7 @@
       S: <textarea v-model="currentSolution" />
     </div>
     <div>
-      <button @click="updateQuestion()">Update Question</button>
+      <button @click="updateQuestion()">Update Question</button> <button @click="$emit('deleteQuestion', question.id)">Delete Question</button>
     </div>
   </div>
 </template>

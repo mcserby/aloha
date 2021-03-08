@@ -11,7 +11,7 @@
         <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage" @delete-stage="deleteStage"/>
       </div>
       <div class="stage-editor-container">
-        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
+        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
     </div>
     <div v-if="projectIsLoaded">
@@ -118,6 +118,15 @@ export default {
       const questionIndex = currentStageCopy.questions.findIndex(q => q.id == question.id);
       if(questionIndex >= 0){
         currentStageCopy.questions.splice(questionIndex, 1, question);
+      }
+      await this.updateStages(currentStageCopy);
+    },
+    async deleteQuestion(id){
+      console.log('deleteQuestion with id', id);
+      const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
+      const questionIndex = currentStageCopy.questions.findIndex(q => q.id == id);
+      if(questionIndex >= 0){
+        currentStageCopy.questions.splice(questionIndex, 1);
       }
       await this.updateStages(currentStageCopy);
     },
