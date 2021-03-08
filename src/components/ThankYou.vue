@@ -1,6 +1,6 @@
 <template>
   <div>
-    Thank you {{firstName}}! Have a nice day!
+    Thank you {{firstName}}! Test was submitted. Have a nice day!
   </div>
 </template>
 

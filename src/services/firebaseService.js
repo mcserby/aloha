@@ -23,7 +23,6 @@ export default {
     const result  = await firebase.auth().signInWithPopup(provider);
     var credential = result.credential;
     var token = credential.accessToken;
-    console.log('user token: ', token);
     var user = result.user;
     console.log(JSON.stringify(user));
     return {token: token, user: user};
@@ -126,11 +125,34 @@ export default {
     });
   },
 
-  submitSolution: async function(solution){
+  startTest: async function(startTest){
     try {
-      console.log('submitSolution:', solution);
       const db = firebase.firestore();
-      await db.collection("solutions").add(solution);
+      await db.collection("solutions").doc(startTest.testId).set(startTest);
+    } catch(e){
+      console.error(e);
+    }
+  },
+
+  saveProgress: async function(solution){
+    try {
+      const db = firebase.firestore();
+      await db.collection("solutions").doc(solution.testId).update({
+        questions: solution.questions
+      });
+    } catch(e){
+      console.error(e);
+    }
+  },
+
+  loadSolution: async function(solutionId){
+    try {
+      const db = firebase.firestore();
+      const solution = await db.collection("solutions").doc(solutionId).get();
+      if (solution.exists) {
+        return {id: solution.id, ...solution.data()};
+      }
+      return null;
     } catch(e){
       console.error(e);
     }
@@ -148,6 +170,18 @@ export default {
     } catch(e){
       console.error(e);
     }
-  }
+  },
+
+  submitSolution: async function(solution){
+    try {
+      const db = firebase.firestore();
+      await db.collection("solutions").doc(solution.testId).update({
+        questions: solution.questions,
+        completed: true
+      });
+    } catch(e){
+      console.error(e);
+    }
+  },
 
 }

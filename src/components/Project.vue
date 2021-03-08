@@ -47,9 +47,7 @@ export default {
   },
   computed: {
     projectId(){
-      const route =  this.$route.params.projectId;
-      console.log('route:', route);
-      return route;
+      return this.$route.params.projectId;
     },
     projectIsLoaded(){
       return this.project.id !== undefined;

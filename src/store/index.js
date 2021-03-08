@@ -46,6 +46,14 @@ const store = createStore({
       },
       updateSolutions(state, solutions){
         state.solutions.splice(0, state.solutions.length, ...solutions);
+      },
+      updateSolution(state, solutionQuestions){
+        const solutionIndex = state.solutions.findIndex(s => s.testId === solutionQuestions.testId);
+        if(solutionIndex >= 0){
+          const solution = state.solutions[solutionIndex];
+          solution.questions.splice(0, solution.questions.length, ...solution.questions);
+          state.solutions.splice(solutionIndex, 1, solution);
+        }
       }
 
     }

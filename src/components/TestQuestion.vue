@@ -4,7 +4,7 @@
       Q: {{question.text}}
     </div>
     <div>
-      A: <textarea v-model="answer" />
+      A: <textarea v-model="answer" :readonly="!isEditable" />
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@
 
 export default {
   name: 'TestQuestion',
-  props: ['question'],
+  props: ['question', 'isEditable'],
   data() {
     return {
     }
