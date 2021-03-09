@@ -51,7 +51,6 @@ export default {
   },
   methods: {
     async updateQuestion(question){
-      console.log('updateQuestion', question);
       const questionsCopy = JSON.parse(JSON.stringify(this.questions));
       const questionIndex = questionsCopy.findIndex(q => q.id == question.id);
       if(questionIndex >= 0){
@@ -61,7 +60,6 @@ export default {
         testId: this.solutionId,
         questions: questionsCopy
       });
-      console.log('solutionUpdateObject', solution.questions);
       await firebaseService.saveProgress(solution);
       this.$store.commit('updateSolution', solution);
     }
