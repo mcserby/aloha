@@ -140,7 +140,8 @@ export default {
       await this.updateStages(currentStageCopy);
     },
     async addContributor(){
-      const newContributors = JSON.parse(JSON.stringify(this.contributors)).push(this.newContributor.trim());
+      const newContributors = JSON.parse(JSON.stringify(this.contributors));
+      newContributors.push(this.newContributor.trim());
       const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
       this.$store.commit('updateProject', updatedProject);
     }
