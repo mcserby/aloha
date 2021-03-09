@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>Test Generator</div>
     <div>
        Number of tests: <input type="text" v-model="numberOfTests" />
     </div>

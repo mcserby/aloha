@@ -14,10 +14,17 @@
         <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
     </div>
-    <div v-if="projectIsLoaded">
+    <div class="solutions-link-container" v-if="projectIsLoaded">
       <router-link :to="{name: 'Solutions', params: {'projectId': this.project.id}}">Go to Solutions</router-link>
     </div>
-    <div>
+    <div v-if="projectIsLoaded">
+      <div>Contributors:</div>
+      <span class="contributor" v-for="email in contributors" v-bind:key="email">{{email}}</span>
+      <input type="text" placeholder="new contributor" v-model="newContributor" />
+      <button @click="addContributor()">Add new contributor</button>
+    </div>
+
+    <div class="test-generator-container">
       <TestGenerator v-if="projectIsLoaded" :project="project" />
     </div>
   </div>
@@ -36,6 +43,7 @@ export default {
   data() {
     return {
       newProjectName: '',
+      newContributor: '',
     }
   },
   mounted() {
@@ -54,6 +62,9 @@ export default {
     },
     project(){
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
+    },
+    contributors(){
+      return this.project.owners;
     },
     stages(){
       return this.project.stages;
@@ -128,6 +139,11 @@ export default {
       }
       await this.updateStages(currentStageCopy);
     },
+    async addContributor(){
+      const newContributors = JSON.parse(JSON.stringify(this.contributors)).push(this.newContributor.trim());
+      const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
+      this.$store.commit('updateProject', updatedProject);
+    }
   }
 }
 </script>
@@ -148,6 +164,21 @@ export default {
 
 .stage-editor-container {
   background-color: #bda5b787
+}
+
+.test-generator-container {
+    margin: 1em;
+    background-color: #b4c5d2;
+}
+
+.solutions-link-container {
+    margin: 1em;
+    font-size: 2em;
+    background-color: #34c5d8;
+}
+
+.contributor {
+  margin: 1em;
 }
 
 </style>

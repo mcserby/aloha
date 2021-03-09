@@ -5,7 +5,6 @@ const store = createStore({
        return {
           isLoggedIn: false,
           userName: null,
-          userId: null,
           projects: [],
           selectedStageId: null,
           testIds: [],
@@ -16,12 +15,10 @@ const store = createStore({
       loginUser(state, user) {
         state.isLoggedIn = true;
         state.userName = user.displayName;
-        state.userId = user.uid;
       },
       logout(state) {
         state.isLoggedIn = false;
         state.userName = null;
-        state.userId = null;
       },
       addProject(state, project){
         state.projects.push(project);

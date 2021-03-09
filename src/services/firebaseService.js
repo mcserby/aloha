@@ -40,7 +40,7 @@ export default {
     try {
       const db = firebase.firestore();
       const projects = await db.collection("projects")
-        .where("owners", "array-contains", firebase.auth().currentUser.uid)
+        .where("owners", "array-contains", firebase.auth().currentUser.email)
         .get();
       const results = [];
       projects.forEach(p => results.push({id: p.id, ...p.data()}));
@@ -50,13 +50,13 @@ export default {
     }
   },
 
-  addProject: async function(projectName, userId){
+  addProject: async function(projectName){
     try {
       const db = firebase.firestore();
       const docRef = await db.collection("projects").add({
         name: projectName,
         stages: [{id: uuidv4(), name:'default', questions: []}],
-        owners: [userId]
+        owners: [firebase.auth().currentUser.email]
       });
       const project = await db.collection("projects").doc(docRef.id).get()
       return {id: project.id, ...project.data()};
@@ -78,6 +78,15 @@ export default {
     const db = firebase.firestore();
     await db.collection("projects").doc(projectId).update({
         stages: stages
+    });
+    const project = await db.collection("projects").doc(projectId).get()
+    return {id: project.id, ...project.data()};
+  },
+
+  updateContributors: async function(projectId, contributors){
+    const db = firebase.firestore();
+    await db.collection("projects").doc(projectId).update({
+        owners: contributors
     });
     const project = await db.collection("projects").doc(projectId).get()
     return {id: project.id, ...project.data()};
