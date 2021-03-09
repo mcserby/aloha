@@ -23,7 +23,6 @@ export default {
     async loadProjects(){
       try {
         const projects = await firebaseService.loadUserProjects();
-        projects.forEach(p => console.log('p:', p));
         projects.forEach(p => this.$store.commit('addProject', p));
       } catch(e){
         console.error(e);

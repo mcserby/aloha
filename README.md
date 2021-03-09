@@ -22,3 +22,17 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+ALOHA
+
+create project (eg. Internship 2021)
+ - owner
+ - editors
+
+test step (1 -> n)
+
+each step (1 -> n problems, questions)
+
+Generate tests -> with URL
+save solution.

@@ -11,8 +11,14 @@
         <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage" @delete-stage="deleteStage"/>
       </div>
       <div class="stage-editor-container">
-        <StageEditor :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion"/>
+        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
+    </div>
+    <div v-if="projectIsLoaded">
+      <router-link :to="{name: 'Solutions', params: {'projectId': this.project.id}}">Go to Solutions</router-link>
+    </div>
+    <div>
+      <TestGenerator v-if="projectIsLoaded" :project="project" />
     </div>
   </div>
 </template>
@@ -22,6 +28,7 @@
 import firebaseService from '../services/firebaseService';
 import StageSelector from './StageSelector';
 import StageEditor from './StageEditor';
+import TestGenerator from './TestGenerator';
 import { v4 as uuidv4 } from 'uuid';
 
 export default {
@@ -35,16 +42,18 @@ export default {
   },
   components: {
     StageSelector,
-    StageEditor
+    StageEditor,
+    TestGenerator
   },
   computed: {
     projectId(){
-      const route =  this.$route.params.projectId;
-      console.log('route:', route);
-      return route;
+      return this.$route.params.projectId;
+    },
+    projectIsLoaded(){
+      return this.project.id !== undefined;
     },
     project(){
-      return this.$store.state.projects.filter(p => p.id === this.projectId)[0];
+      return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
     stages(){
       return this.project.stages;
@@ -93,7 +102,12 @@ export default {
     },
     async addNewQuestion(){
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
-      currentStageCopy.questions.push({id: uuidv4(), text: 'question', answer: 'answer'});
+      currentStageCopy.questions.push({
+        id: uuidv4(),
+        text: 'question',
+        answer: 'answer',
+        solution: 'solution'
+      });
       await this.updateStages(currentStageCopy);
     },
     async updatedQuestion(question){
@@ -102,6 +116,15 @@ export default {
       const questionIndex = currentStageCopy.questions.findIndex(q => q.id == question.id);
       if(questionIndex >= 0){
         currentStageCopy.questions.splice(questionIndex, 1, question);
+      }
+      await this.updateStages(currentStageCopy);
+    },
+    async deleteQuestion(id){
+      console.log('deleteQuestion with id', id);
+      const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
+      const questionIndex = currentStageCopy.questions.findIndex(q => q.id == id);
+      if(questionIndex >= 0){
+        currentStageCopy.questions.splice(questionIndex, 1);
       }
       await this.updateStages(currentStageCopy);
     },
@@ -116,7 +139,7 @@ export default {
   display: grid;
   grid-gap: 1rem;
   font-size:1em;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 2fr;
 }
 
 .stage-selector-container {

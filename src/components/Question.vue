@@ -1,13 +1,16 @@
 <template>
   <div>
     <div>
-      Question: <textarea v-model="currentText" />
-    <div>
-    </div>
-      Answer:  <textarea v-model="currentAnswer" />
+      Q: <textarea v-model="currentText" />
     </div>
     <div>
-      <button @click="updateQuestion()">Update Question</button>
+      A: <textarea v-model="currentAnswer" />
+    </div>
+    <div v-if="showSolution">
+      S: <textarea v-model="currentSolution" />
+    </div>
+    <div>
+      <button @click="updateQuestion()">Update Question</button> <button @click="$emit('deleteQuestion', question.id)">Delete Question</button>
     </div>
   </div>
 </template>
@@ -16,16 +19,18 @@
 
 export default {
   name: 'Question',
-  props: ['question'],
+  props: ['question', 'showSolution'],
   data() {
     return {
       currentText: '',
-      currentAnswer: ''
+      currentAnswer: '',
+      currentSolution: ''
     }
   },
   mounted(){
     this.currentText = this.question.text;
     this.currentAnswer = this.question.answer;
+    this.currentSolution = this.question.solution;
   },
   components: {
   },
@@ -33,11 +38,20 @@ export default {
   },
   methods: {
     updateQuestion(){
-      this.$emit('updateQuestion', {id: this.question.id, text: this.currentText, answer: this.currentAnswer});
+      this.$emit('updateQuestion', {
+        id: this.question.id,
+        text: this.currentText,
+        answer: this.currentAnswer,
+        solution: this.currentSolution
+      });
     }
   }
 }
 </script>
 
 <style>
+textarea {
+  width: 90%;
+  height: 100%;
+}
 </style>
