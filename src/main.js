@@ -1,7 +1,15 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import store from './store/index.js'
-import router from './router/index.js'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router/index.js";
+import store from "./store/index.js";
+import PrimeVue from 'primevue/config';
+import Button from 'primevue/button';
+import 'primevue/resources/primevue.min.css';
+import 'primeicons/primeicons.css';
+import 'primevue/resources/themes/vela-green/theme.css';
 
+const app = createApp(App);
 
-createApp(App).use(store).use(router).mount('#app')
+app.use(router).use(store).use(PrimeVue, {ripple: true}).mount('#app');
+
+app.component('Button', Button)
