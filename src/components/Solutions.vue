@@ -7,8 +7,11 @@
       No solution has been submitted yet
     </div>
     <div v-else>
-      <div class="project-card" v-for="solution in solutions" v-bind:key="solution.id">
-        <router-link :to="{ name: 'Solution', params: { solutionId: solution.id }}">Solution: {{solution.firstName}}_{{solution.secondName}}</router-link>
+      <div v-for="solution in solutions" v-bind:key="solution.id">
+        <div class="solution-wrapper">
+          <div><router-link :to="{ name: 'Solution', params: { solutionId: solution.id }}">Solution: {{solution.firstName}}_{{solution.secondName}}</router-link></div>
+          <div>{{percentageOfCompletedQuestions(solution)}}% completed</div>
+        </div>
       </div>
     </div>
   </div>
@@ -39,12 +42,25 @@ export default {
   },
   methods: {
     async loadSolutions(projectId){
-      const solutions = await firebaseService.loadSolutions(projectId);
-      this.$store.commit('updateSolutions', solutions);
+      if(this.solutions.length === 0){
+        console.log('loading solutions...');
+        const solutions = await firebaseService.loadSolutions(projectId);
+        this.$store.commit('updateSolutions', solutions);
+      }
+    },
+    percentageOfCompletedQuestions(solution){
+      return 100 * solution.questions.filter(q => q.score > -1).length / solution.questions.length
     }
   }
 }
 </script>
 
 <style>
+.solution-wrapper {
+  margin: 0 auto;
+  display: grid;
+  grid-gap: 1rem;
+  font-size:1em;
+  grid-template-columns: 2fr 1fr;
+}
 </style>

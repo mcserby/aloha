@@ -26,13 +26,10 @@ export default {
     PageHeader
   },
   computed: {
-    userId(){
-       return this.$store.state.userId;
-    }
   },
   methods: {
     async create(){
-      const project = await firebaseService.addProject(this.newProjectName, this.userId);
+      const project = await firebaseService.addProject(this.newProjectName);
       console.log('project', project);
       this.$store.commit('addProject', project);
       this.$router.push({name: 'Project', params: {'projectId': project.id}})

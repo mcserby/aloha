@@ -5,7 +5,6 @@ const store = createStore({
        return {
           isLoggedIn: false,
           userName: null,
-          userId: null,
           projects: [],
           selectedStageId: null,
           testIds: [],
@@ -16,12 +15,10 @@ const store = createStore({
       loginUser(state, user) {
         state.isLoggedIn = true;
         state.userName = user.displayName;
-        state.userId = user.uid;
       },
       logout(state) {
         state.isLoggedIn = false;
         state.userName = null;
-        state.userId = null;
       },
       addProject(state, project){
         state.projects.push(project);
@@ -51,8 +48,7 @@ const store = createStore({
         const solutionIndex = state.solutions.findIndex(s => s.testId === solutionQuestions.testId);
         if(solutionIndex >= 0){
           const solution = state.solutions[solutionIndex];
-          solution.questions.splice(0, solution.questions.length, ...solution.questions);
-          state.solutions.splice(solutionIndex, 1, solution);
+          solution.questions.splice(0, solution.questions.length, ...solutionQuestions.questions);
         }
       }
 
