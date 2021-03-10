@@ -1,10 +1,12 @@
 <template>
-  <div>
+  <div class="base-background">
     <div>
-       Number of tests: <input type="text" v-model="numberOfTests" />
+       <h4>Number of tests:</h4>
+      <Input type="text" v-model="numberOfTests" />
     </div>
     <div>
-      <button @click="generateTests()">Generate Tests</button>  <button @click="clearTestsForProject()">Clear all tests</button>
+      <Button @click="generateTests()">Generate Tests</Button>
+      <Button @click="clearTestsForProject()">Clear all tests</Button>
     </div>
     <div>
       <div>Generated Tests:</div>

@@ -6,14 +6,14 @@
     <div class="sidemenu-items">
       <div class="tools">
         <p class="mini-title">Tools</p>
-        <p class="nav-item">Internships</p>
-        <p class="nav-item">Evaluations</p>
+        <p class="nav-item"><i class="pi pi-th-large"></i>Internships</p>
+        <p class="nav-item" @click="$router.push({name: 'Main'})"><i class="pi pi-book"></i>Evaluations</p>
       </div>
       <div class="user-details">
         <p class="mini-title">Other</p>
         <p class="nav-item username">{{userName}}</p>
-        <p v-if="isLoggedIn" @click="logout()" class="nav-item other-item">Log Out</p>
-        <p v-else @click="login()" class="nav-item other-item">Log In</p>
+        <p v-if="isLoggedIn" @click="logout()" class="nav-item other-item"><i class="pi pi-sign-out"></i>Log Out</p>
+        <p v-else @click="login()" class="nav-item other-item"><i class="pi pi-sign-in"></i>Log In</p>
       </div>
     </div>
   </div>
@@ -75,8 +75,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 35px;
+    padding-right: 35px;
     padding-top: 2em;
     width: 100%;
     height: calc(100% - 200px);
@@ -99,11 +99,17 @@ export default {
     }
 
     .nav-item {
-      padding: 7px 15px;
+      padding: 10px 15px;
       color: #eee;
       margin: 1em 0;
       width: 100%;
       border-radius: 12px;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 10px;
+      }
 
       &:hover {
         cursor: pointer;
@@ -112,6 +118,7 @@ export default {
     }
     .other-item {
       text-align: center;
+      justify-content: center;
     }
 
     .username {

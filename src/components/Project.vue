@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="base-container">
     <div>
-      This is project page.
-      Project id: {{project.id}}
-      Project name: {{project.name}}
+      Project Id: {{project.id}}
     </div>
+    <PageHeader :title="'Project: ' + project.name"/>
     <div><button @click="deleteProject()">Delete Project</button></div>
     <div class="stage-container">
       <div class="stage-selector-container">
@@ -30,6 +29,7 @@ import StageSelector from './StageSelector';
 import StageEditor from './StageEditor';
 import TestGenerator from './TestGenerator';
 import { v4 as uuidv4 } from 'uuid';
+import PageHeader from "@/components/PageHeader";
 
 export default {
   name: 'Project',
@@ -41,6 +41,7 @@ export default {
   mounted() {
   },
   components: {
+    PageHeader,
     StageSelector,
     StageEditor,
     TestGenerator
