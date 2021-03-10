@@ -42,10 +42,14 @@ export default {
       return this.$store.state.solutions.filter(s => s.id == this.solutionId)[0];
     },
     questions(){
-      return this.solution.questions;
+      return this.solution.questions || [];
     },
     percentageOfCompletedQuestions(){
-      return 100 * this.questions.filter(q => q.score > -1).length / this.questions.length
+      if(this.questions.length == 0){
+        return 0;
+      }
+      const result = parseFloat(100 * this.questions.filter(q => q.score > -1).length / this.questions.length).toFixed(2);
+      return result;
     }
 
   },
@@ -62,6 +66,9 @@ export default {
       });
       await firebaseService.saveProgress(solution);
       this.$store.commit('updateSolution', solution);
+    },
+    completeEvaluation(){
+      this.$router.push({name: 'Solutions', params: {'projectId': this.solutionId}});
     }
   }
 }
