@@ -163,7 +163,7 @@ export default {
 
 .test-generator-container {
   background-color: #232931;
-  padding: 2em 3em;
+  padding: 1em;
   border-radius: 15px;
 }
 
@@ -176,20 +176,11 @@ export default {
 
 .stage-container {
   width: 100%;
-  background-color: red;
   margin-top: 2em;
   display: grid;
   grid-gap: 1rem;
   font-size: 1em;
-  grid-template-columns: 1fr 2fr;
-}
-
-.stage-selector-container {
-  background-color: #b94c8d66
-}
-
-.stage-editor-container {
-  background-color: #bda5b787
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
 
 .contributors-container {

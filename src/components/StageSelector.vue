@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <div class="stage-selector">
     Stage Selector
     <div v-for="stage in stages" v-bind:key="stage.id" class="stage">
       <div @click="this.$emit('selectStage', stage)">
       {{stage.name}}
       </div>
       <div>
-        <button @click="this.$emit('deleteStage', stage)">delete</button>
+        <Button class="rnd-btn" @click="this.$emit('deleteStage', stage)" icon="pi pi-times"></Button>
       </div>
     </div>
     <div>
       <div v-if="!newStageEditMode" @click="enableNewStage()">
-        new stage...
+        <Button label="New Stage" class="rnd-btn"></Button>
       </div>
       <div v-else>
-        <input type="text" placeholder="new stage..." v-model="newStageName">
-        <button @click="saveStage()"> Save </button>
+        <Input type="text" placeholder="new stage..." v-model="newStageName" />
+        <Button class="rnd-btn" @click="saveStage()" label="Save"></Button>
       </div>
     </div>
   </div>
@@ -52,14 +52,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .stage {
   max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-gap: 1rem;
-  font-size:1em;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  justify-content: space-between;
+  background-color: #3A3F46;
+  align-items: center;
+  border-radius: 15px;
+  margin: .5em 0;
+  padding: 15px;
 }
 
+.stage-selector {
+  background-color: #232931;
+  padding: 1em;
+  border-radius: 15px;
+}
 </style>
