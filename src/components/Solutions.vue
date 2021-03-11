@@ -49,7 +49,11 @@ export default {
       }
     },
     percentageOfCompletedQuestions(solution){
-      return 100 * solution.questions.filter(q => q.score > -1).length / solution.questions.length
+      const questions = solution.questions || [];
+      if(questions.length == 0){
+        return 0;
+      }
+      return parseFloat(100 * questions.filter(q => q.score > -1).length / questions.length).toFixed(2);
     }
   }
 }

@@ -70,7 +70,7 @@ export default {
     projectIsLoaded() {
       return this.project.id !== undefined;
     },
-    project() {
+    project(){
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
     contributors() {
@@ -149,8 +149,9 @@ export default {
       }
       await this.updateStages(currentStageCopy);
     },
-    async addContributor() {
-      const newContributors = JSON.parse(JSON.stringify(this.contributors)).push(this.newContributor.trim());
+    async addContributor(){
+      const newContributors = JSON.parse(JSON.stringify(this.contributors));
+      newContributors.push(this.newContributor.trim());
       const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
       this.$store.commit('updateProject', updatedProject);
     }
