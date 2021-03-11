@@ -47,7 +47,7 @@ export default {
 
 <style lang="scss" scoped>
 .sidemenu-container {
-  position: absolute;
+  position: fixed;
   width: 250px;
   height: 100vh;
   display: flex;

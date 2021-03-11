@@ -1,12 +1,12 @@
 <template>
-  <div class="base-background">
+  <div>
     <div>
        <h4>Number of tests:</h4>
-      <Input type="text" v-model="numberOfTests" />
+      <Input class="tests-input" type="text" v-model="numberOfTests" />
     </div>
     <div>
-      <Button @click="generateTests()">Generate Tests</Button>
-      <Button @click="clearTestsForProject()">Clear all tests</Button>
+      <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
+      <Button class="test-generator-button" @click="clearTestsForProject()">Clear all tests</Button>
     </div>
     <div>
       <div>Generated Tests:</div>
@@ -80,9 +80,15 @@ export default {
 }
 </script>
 
-<style>
-textarea {
-  width: 90%;
-  height: 100%;
-}
+<style scoped lang="scss">
+  .test-generator-button {
+    margin-right: 1em;
+    margin-bottom: 1em;
+    border-radius: 15px;
+  }
+
+  .tests-input {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 </style>

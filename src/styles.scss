@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+a:-webkit-any-link {
+    text-decoration: none;
+}
+
 body {
     color: #eee;
     font-family: 'Poppins', sans-serif;
@@ -25,6 +29,10 @@ body {
     align-items: flex-start;
 }
 
+.rnd-btn {
+    border-radius: 15px !important;
+}
+
 .base-background {
     padding: 1em;
     background-color: #232931;
@@ -35,11 +43,9 @@ input {
     border: 1px solid #4a515a !important;
     border-radius: 15px !important;
     background: #232931 !important;
-    margin: .5em !important;
 }
 
 .primary-btn {
-    margin: .5em !important;
     font-family: 'Poppins', sans-serif !important;
     border-radius: 15px !important;
     color: #eee !important;
