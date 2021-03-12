@@ -1,17 +1,19 @@
 <template>
-  <Header />
-  <router-view />
+  <Sidemenu />
+  <div class="routed-view">
+    <router-view />
+  </div>
 </template>
 
 <script>
 
-import Header from './components/Header';
+import Sidemenu from './components/Sidemenu'
 import firebaseService from './services/firebaseService';
 
 export default {
   name: 'App',
   components: {
-    Header
+    Sidemenu
   },
   mounted() {
     firebaseService.init();
@@ -41,15 +43,11 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import './styles.scss';
+
+.routed-view {
+  margin-left: 250px;
+  height: 100vh;
 }
 
-body {
-  margin: 0;
-}
 </style>

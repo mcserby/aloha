@@ -1,16 +1,17 @@
 <template>
   <div>
     <div>
-      Q: <textarea v-model="currentText" />
+      Q:  <Textarea :autoResize="true" v-model="currentText" />
     </div>
     <div>
-      A: <textarea v-model="currentAnswer" />
+      A: <Textarea :autoResize="true" v-model="currentAnswer" />
     </div>
     <div v-if="showSolution">
-      S: <textarea v-model="currentSolution" />
+      S: <Textarea :autoResize="true" v-model="currentSolution" />
     </div>
     <div>
-      <button @click="updateQuestion()">Update Question</button> <button @click="$emit('deleteQuestion', question.id)">Delete Question</button>
+      <Button class="rnd-btn question-button" @click="updateQuestion()">Update Question</Button>
+      <Button class="rnd-btn question-button" @click="$emit('deleteQuestion', question.id)">Delete Question</Button>
     </div>
   </div>
 </template>
@@ -49,9 +50,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 textarea {
-  width: 90%;
-  height: 100%;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.question-button {
+  margin-right: .5em;
 }
 </style>

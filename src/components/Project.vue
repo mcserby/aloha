@@ -1,32 +1,40 @@
 <template>
-  <div>
+  <div class="base-container">
     <div>
-      This is project page.
-      Project id: {{project.id}}
-      Project name: {{project.name}}
+      Project Id: {{ project.id }}
     </div>
-    <div><button @click="deleteProject()">Delete Project</button></div>
+    <PageHeader :title="'Project: ' + project.name"/>
+    <Button class="rnd-btn" @click="deleteProject()">Delete Project</Button>
     <div class="stage-container">
       <div class="stage-selector-container">
-        <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage" @delete-stage="deleteStage"/>
+        <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage"
+                       @delete-stage="deleteStage"/>
       </div>
       <div class="stage-editor-container">
-        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion" @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
+        <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion"
+                     @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
     </div>
-    <div class="solutions-link-container" v-if="projectIsLoaded">
-      <router-link :to="{name: 'Solutions', params: {'projectId': this.project.id}}">Go to Solutions</router-link>
-    </div>
-    <div v-if="projectIsLoaded">
-      <div>Contributors:</div>
-      <span class="contributor" v-for="email in contributors" v-bind:key="email">{{email}}</span>
-      <input type="text" placeholder="new contributor" v-model="newContributor" />
-      <button @click="addContributor()">Add new contributor</button>
+      <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}" v-if="projectIsLoaded">
+        <Button class="primary-btn" label="Go To Solutions"></Button>
+      </router-link>
+    <div v-if="projectIsLoaded" class="contributors-container">
+      <div class="add-contributor-container">
+        <div class="add-contributor-input">
+          <Input type="text" placeholder="E-mail Address" v-model="newContributor"/>
+          <Button class="add-contributor" @click="addContributor()">Add new contributor</Button>
+        </div>
+        <div>Contributors:</div>
+        <span class="contributor" v-for="email in contributors" v-bind:key="email">{{ email }}</span>
+      </div>
+
+
+      <div class="test-generator-container">
+        <TestGenerator v-if="projectIsLoaded" :project="project"/>
+      </div>
     </div>
 
-    <div class="test-generator-container">
-      <TestGenerator v-if="projectIsLoaded" :project="project" />
-    </div>
+
   </div>
 </template>
 
@@ -36,7 +44,8 @@ import firebaseService from '../services/firebaseService';
 import StageSelector from './StageSelector';
 import StageEditor from './StageEditor';
 import TestGenerator from './TestGenerator';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
+import PageHeader from "@/components/PageHeader";
 
 export default {
   name: 'Project',
@@ -49,69 +58,70 @@ export default {
   mounted() {
   },
   components: {
+    PageHeader,
     StageSelector,
     StageEditor,
     TestGenerator
   },
   computed: {
-    projectId(){
+    projectId() {
       return this.$route.params.projectId;
     },
-    projectIsLoaded(){
+    projectIsLoaded() {
       return this.project.id !== undefined;
     },
     project(){
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
-    contributors(){
+    contributors() {
       return this.project.owners;
     },
-    stages(){
+    stages() {
       return this.project.stages;
     },
-    selectedStage(){
+    selectedStage() {
       const selectedStageId = this.$store.state.selectedStageId;
       const selectedStageIndex = Math.max(0, this.stages.findIndex(s => s.id == selectedStageId));
       return this.stages[selectedStageIndex]
     }
   },
   methods: {
-    deleteProject(){
+    deleteProject() {
       const projId = this.project.id;
       firebaseService.deleteProject(projId);
       this.$router.push({name: 'Main'});
       this.$store.commit('deleteProject', projId);
     },
-    selectStage(stage){
+    selectStage(stage) {
       console.log('selectStage', stage);
       this.$store.commit('selectStage', stage.id);
     },
-    async saveNewStage(stage){
+    async saveNewStage(stage) {
       const newStages = JSON.parse(JSON.stringify(this.stages));
       newStages.push(stage);
       const updatedProject = await firebaseService.updateStages(this.project.id, newStages);
       this.$store.commit('updateProject', updatedProject);
-      this.selectedStage = updatedProject.stages? updatedProject.stages[0] : 'unknown';
+      this.selectedStage = updatedProject.stages ? updatedProject.stages[0] : 'unknown';
     },
-    async deleteStage(stage){
+    async deleteStage(stage) {
       const newStages = JSON.parse(JSON.stringify(this.stages));
       const index = newStages.findIndex(s => s.id == stage.id);
-      if(index !== -1){
+      if (index !== -1) {
         newStages.splice(index, 1);
       }
       const updatedProject = await firebaseService.updateStages(this.project.id, newStages);
       this.$store.commit('updateProject', updatedProject);
     },
-    async updateStages(currentStageCopy){
+    async updateStages(currentStageCopy) {
       const newStages = JSON.parse(JSON.stringify(this.stages));
       const index = newStages.findIndex(s => s.id == currentStageCopy.id);
-      if(index !== -1){
+      if (index !== -1) {
         newStages.splice(index, 1, currentStageCopy);
       }
       const updatedProject = await firebaseService.updateStages(this.project.id, newStages);
       this.$store.commit('updateProject', updatedProject);
     },
-    async addNewQuestion(){
+    async addNewQuestion() {
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
       currentStageCopy.questions.push({
         id: uuidv4(),
@@ -121,20 +131,20 @@ export default {
       });
       await this.updateStages(currentStageCopy);
     },
-    async updatedQuestion(question){
+    async updatedQuestion(question) {
       console.log('updateQuestion', question);
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
       const questionIndex = currentStageCopy.questions.findIndex(q => q.id == question.id);
-      if(questionIndex >= 0){
+      if (questionIndex >= 0) {
         currentStageCopy.questions.splice(questionIndex, 1, question);
       }
       await this.updateStages(currentStageCopy);
     },
-    async deleteQuestion(id){
+    async deleteQuestion(id) {
       console.log('deleteQuestion with id', id);
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
       const questionIndex = currentStageCopy.questions.findIndex(q => q.id == id);
-      if(questionIndex >= 0){
+      if (questionIndex >= 0) {
         currentStageCopy.questions.splice(questionIndex, 1);
       }
       await this.updateStages(currentStageCopy);
@@ -150,36 +160,53 @@ export default {
 </script>
 
 <style>
-.stage-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-gap: 1rem;
-  font-size:1em;
-  grid-template-columns: 1fr 2fr;
-}
-
-.stage-selector-container {
-  background-color: #b94c8d66
-}
-
-.stage-editor-container {
-  background-color: #bda5b787
-}
 
 .test-generator-container {
-    margin: 1em;
-    background-color: #b4c5d2;
+  background-color: #232931;
+  padding: 1em;
+  border-radius: 15px;
 }
 
-.solutions-link-container {
-    margin: 1em;
-    font-size: 2em;
-    background-color: #34c5d8;
+
+.add-contributor-container {
+  background-color: #232931;
+  padding: 2em 3em;
+  border-radius: 15px;
 }
 
-.contributor {
-  margin: 1em;
+.stage-container {
+  width: 100%;
+  margin-top: 2em;
+  display: grid;
+  grid-gap: 1rem;
+  font-size: 1em;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 }
+
+.contributors-container {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 1em;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+}
+
+.contributors-container .add-contributor {
+  border-radius: 15px;
+  margin-top: 1em;
+}
+
+.add-contributor-input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2em;
+}
+
+.solution-button {
+  margin: 2em 0;
+}
+
 
 </style>
