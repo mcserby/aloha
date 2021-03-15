@@ -61,12 +61,14 @@ export default {
       this.$store.commit('updateTestIds', []);
     },
     generateTest(){
-      const testQuestions = this.project.stages.map(s => {
-        const pos = this.getRandomInt(s.questions.length);
-        let testQuestion = JSON.parse(JSON.stringify(s.questions[pos]));
-        delete testQuestion.solution;
-        return testQuestion;
-      });
+      const testQuestions = this.project.stages
+        .filter(stage => stage.questions.length > 0)
+        .map(s => {
+          const pos = this.getRandomInt(s.questions.length);
+          let testQuestion = JSON.parse(JSON.stringify(s.questions[pos]));
+          delete testQuestion.solution;
+          return testQuestion;
+        });
       return {
         projectId: this.project.id,
         projectName: this.project.name,
