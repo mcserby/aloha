@@ -1,6 +1,8 @@
 <template>
-  <div>
-    Thank you {{firstName}}! Test was submitted. Have a nice day!
+  <div class="base-container thank-you">
+    <h3 class="message">
+      🎉 Thank you {{firstName}}! Test was submitted. Have a nice day! 🎉
+    </h3>
   </div>
 </template>
 
@@ -16,5 +18,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  .thank-you {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .message {
+      background: #4ECCA3;
+      padding: 2em;
+      border-radius: 15px;
+    }
+  }
 </style>

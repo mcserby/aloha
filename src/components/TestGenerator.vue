@@ -8,10 +8,10 @@
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
       <Button class="test-generator-button" @click="clearTestsForProject()">Clear all tests</Button>
     </div>
-    <div>
+    <div class="generated-tests">
       <div>Generated Tests:</div>
       <div v-for="testId in testIds" v-bind:key="testId">
-        <router-link :to="{ name: 'Test', params: { testId: testId }}">Test: {{testId}}</router-link>
+          <router-link class="generated-link" :to="{ name: 'Test', params: { testId: testId }}">Test: {{testId}}</router-link>
       </div>
     </div>
   </div>
@@ -83,6 +83,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .generated-tests {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
   .test-generator-button {
     margin-right: 1em;
     margin-bottom: 1em;
@@ -92,5 +97,15 @@ export default {
   .tests-input {
     width: 100%;
     margin-bottom: 1em;
+  }
+
+  .generated-link {
+    color: #4ECCA3;
+    transition: .2s ease;
+
+    &:hover {
+      color: #00C2FF;
+      transition: .2s ease;
+    }
   }
 </style>
