@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div>
-      Q: {{question.text}}
+  <div class="question-container">
+    <div class="question-area">
+      <h2>Q: </h2>
+      <p>{{question.text}}</p>
     </div>
     <div>
-      A: <textarea v-model="answer" :readonly="!isEditable" />
+      <Textarea :autoResize="true" class="answer-area" placeholder="Answer" v-model="answer" :readonly="!isEditable" />
     </div>
   </div>
 </template>
@@ -35,5 +36,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
+  .question-container {
+    margin-bottom: 1.5em;
+  }
+  .question-area {
+    display: flex;
+    align-items: center;
+
+    h2 {
+      margin: 0 .5em 0 0;
+      color: #4ECCA3;
+    }
+  }
+  .answer-area {
+    border-radius: 15px;
+    width: 100%;
+  }
 </style>

@@ -2,11 +2,11 @@
   <div class="stage-selector">
     Stage Selector
     <div v-for="stage in stages" v-bind:key="stage.id" class="stage">
-      <div @click="this.$emit('selectStage', stage)">
+      <div @click="selectStage(stage)">
       {{stage.name}}
       </div>
       <div>
-        <Button class="rnd-btn" @click="this.$emit('deleteStage', stage)" icon="pi pi-times"></Button>
+        <Button class="rnd-btn" @click="deleteStage(stage)" icon="pi pi-times"></Button>
       </div>
     </div>
     <div>
@@ -14,8 +14,8 @@
         <Button label="New Stage" class="rnd-btn"></Button>
       </div>
       <div v-else>
-        <Input type="text" placeholder="new stage..." v-model="newStageName" />
-        <Button class="rnd-btn" @click="saveStage()" label="Save"></Button>
+        <Input type="text" placeholder="New Stage..." v-model="newStageName" />
+        <Button class="rnd-btn save-new-stage" @click="saveStage()" label="Save"></Button>
       </div>
     </div>
   </div>
@@ -47,6 +47,12 @@ export default {
       this.$emit('saveNewStage', {id: uuidv4(), name: this.newStageName, questions: []});
       this.newStageName = '';
       this.newStageEditMode = false;
+    },
+    selectStage(stage) {
+      this.$emit('selectStage', stage);
+    },
+    deleteStage(stage) {
+      this.$emit('deleteStage', stage);
     }
   }
 }
@@ -68,5 +74,9 @@ export default {
   background-color: #232931;
   padding: 1em;
   border-radius: 15px;
+}
+
+.save-new-stage {
+  margin-left: 1em;
 }
 </style>

@@ -4,7 +4,16 @@
       Project Id: {{ project.id }}
     </div>
     <PageHeader :title="'Project: ' + project.name"/>
-    <Button class="rnd-btn" @click="deleteProject()">Delete Project</Button>
+    <div class="test-actions">
+      <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
+      <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors
+      </Button>
+      <Button class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
+                   v-if="projectIsLoaded">
+        <Button class="primary-btn" label="Go To Solutions"></Button>
+      </router-link>
+    </div>
     <div class="stage-container">
       <div class="stage-selector-container">
         <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage"
@@ -15,24 +24,31 @@
                      @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
     </div>
-      <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}" v-if="projectIsLoaded">
-        <Button class="primary-btn" label="Go To Solutions"></Button>
-      </router-link>
-    <div v-if="projectIsLoaded" class="contributors-container">
-      <div class="add-contributor-container">
-        <div class="add-contributor-input">
-          <Input type="text" placeholder="E-mail Address" v-model="newContributor"/>
-          <Button class="add-contributor" @click="addContributor()">Add new contributor</Button>
+    <Dialog :style="{width: '600px'}" :dismissableMask="true" :modal="true" v-model:visible="displayContributors" header="Contributors">
+      <div v-if="projectIsLoaded" class="contributors-container">
+        <div class="add-contributor-container">
+          <div class="add-contributor-input">
+            <Input type="text" placeholder="E-mail Address" v-model="newContributor"/>
+            <Button class="add-contributor" @click="addContributor()">Add new contributor</Button>
+          </div>
+          <div>Contributors:</div>
+          <div class="contributors-emails">
+            <p class="contributor" v-for="email in contributors" v-bind:key="email">{{ email }}</p>
+          </div>
         </div>
-        <div>Contributors:</div>
-        <span class="contributor" v-for="email in contributors" v-bind:key="email">{{ email }}</span>
       </div>
+    </Dialog>
 
-
+    <Dialog :style="{width: '600px'}"
+            :dismissableMask="true"
+            :modal="true"
+            v-model:visible="displayTestGenerator"
+            header="Test Generator"
+    >
       <div class="test-generator-container">
         <TestGenerator v-if="projectIsLoaded" :project="project"/>
       </div>
-    </div>
+    </Dialog>
 
 
   </div>
@@ -51,6 +67,8 @@ export default {
   name: 'Project',
   data() {
     return {
+      displayContributors: false,
+      displayTestGenerator: false,
       newProjectName: '',
       newContributor: '',
     }
@@ -70,7 +88,7 @@ export default {
     projectIsLoaded() {
       return this.project.id !== undefined;
     },
-    project(){
+    project() {
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
     contributors() {
@@ -149,7 +167,7 @@ export default {
       }
       await this.updateStages(currentStageCopy);
     },
-    async addContributor(){
+    async addContributor() {
       const newContributors = JSON.parse(JSON.stringify(this.contributors));
       newContributors.push(this.newContributor.trim());
       const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
@@ -163,15 +181,20 @@ export default {
 
 .test-generator-container {
   background-color: #232931;
-  padding: 1em;
   border-radius: 15px;
 }
 
 
 .add-contributor-container {
   background-color: #232931;
-  padding: 2em 3em;
   border-radius: 15px;
+}
+
+.test-action-button {
+  margin-right: 1em !important;
+  margin-top: .5em !important;
+  width: 155px;
+  text-align: center;
 }
 
 .stage-container {
@@ -181,6 +204,18 @@ export default {
   grid-gap: 1rem;
   font-size: 1em;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.test-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.contributors-emails {
+  display: flex;
+  flex-direction: column;
 }
 
 .contributors-container {
@@ -205,8 +240,8 @@ export default {
 }
 
 .solution-button {
-  margin: 2em 0;
+  width: 200px;
+  margin-top: .5em;
 }
-
 
 </style>

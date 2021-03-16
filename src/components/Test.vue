@@ -1,25 +1,27 @@
 <template>
-  <div>
-    <div>
-      This is the test with id {{testId}}
-    </div>
+  <div class="base-container">
+    <PageHeader :title="'Test ' + testId" :remaining-time="remainingTime"></PageHeader>
     <div class="test-header-container">
-      <div>
-        First Name: <input type="text" v-model="firstName" />   Second Name: <input type="text" v-model="secondName" />
-      </div>
-      <div>
-          <span><button :disabled="!nameFilled" @click="startTest()">Start Test</button></span>
-          <span>{{remainingTime}}</span>
+      <div class="name-inputs">
+        <div class="form-group">
+          <label>First Name</label>
+          <Input type="text" v-model="firstName"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <Input type="text" v-model="secondName"/>
+        </div>
+        <div class="form-group">
+          <Button @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
+        </div>
       </div>
     </div>
-    <div>
+    <div v-if="testStarted" class="questions">
       <div v-for="question in questions" v-bind:key="question.id">
         <TestQuestion :question="question" :isEditable="testIsEditable" @update:answer="question.answer = $event"/>
       </div>
     </div>
-    <div>
-      <button :disabled="!testStarted" @click="submitSolution()">Submit Solution</button>
-    </div>
+    <Button class="rnd-btn submit-test" :disabled="!testStarted" @click="submitSolution()">Submit Solution</Button>
   </div>
 </template>
 
@@ -27,6 +29,7 @@
 
 import firebaseService from '../services/firebaseService';
 import TestQuestion from './TestQuestion';
+import PageHeader from "@/components/PageHeader";
 
 export default {
   name: 'Test',
@@ -51,73 +54,83 @@ export default {
     document.removeEventListener('keydown', this._keyListener);
   },
   components: {
+    PageHeader,
     TestQuestion
   },
   computed: {
-    nameFilled(){
+    nameFilled() {
       return this.firstName && this.secondName;
     },
-    testIsEditable(){
+    testIsEditable() {
       console.log('testIsEditable', !this.testCompleted || this.testStarted);
       return this.testStarted && !this.testCompleted;
     },
-    testStarted(){
-      console.log('testStarted: ',  this.startTime || false);
+    testStarted() {
+      console.log('testStarted: ', this.startTime || false);
       return this.startTime || false;
     },
-    testId(){
+    testId() {
       return this.$route.params.testId;
     },
-    remainingTime(){
+    remainingTime() {
       return this.remainingHours + ':' + this.remainingMinutes + ':' + this.remainingSeconds;
     },
-    remainingHours(){
-      return Math.floor(this.totalTimeInSeconds / 3600).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+    remainingHours() {
+      return Math.floor(this.totalTimeInSeconds / 3600).toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      });
     },
-    remainingMinutes(){
-      return Math.floor((this.totalTimeInSeconds % 3600) / 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+    remainingMinutes() {
+      return Math.floor((this.totalTimeInSeconds % 3600) / 60).toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      });
     },
-    remainingSeconds(){
-      return Math.floor(this.totalTimeInSeconds % 60).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+    remainingSeconds() {
+      return Math.floor(this.totalTimeInSeconds % 60).toLocaleString('en-US', {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      });
     },
   },
   methods: {
-    attachCtrlSave(){
-      this._keyListener = function(e) {
+    attachCtrlSave() {
+      this._keyListener = function (e) {
         if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
           e.preventDefault();
           this.saveProgress();
         }
-       };
-       document.addEventListener('keydown', this._keyListener.bind(this));
+      };
+      document.addEventListener('keydown', this._keyListener.bind(this));
     },
 
-    async loadTest(testId){
+    async loadTest(testId) {
       try {
-          this.test = await firebaseService.loadTest(testId);
-          const solution = await firebaseService.loadSolution(testId);
-          this.questions = this.test.questions;
-          if(solution){
-            console.log('solution', solution);
-            this.testCompleted = solution.completed || false;
-            this.firstName = solution.firstName;
-            if(this.testCompleted){
-                this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
-                return;
-            }
-            this.secondName = solution.secondName;
-            this.startTime = solution.startTime;
-            if(solution.questions){
-                this.questions = solution.questions;
-            }
-            this.totalTimeInSeconds = this.initialTotalTime - (new Date().getTime() - new Date(solution.startTime).getTime())/1000;
-            this.triggerCountdownTimer();
+        this.test = await firebaseService.loadTest(testId);
+        const solution = await firebaseService.loadSolution(testId);
+        this.questions = this.test.questions;
+        if (solution) {
+          console.log('solution', solution);
+          this.testCompleted = solution.completed || false;
+          this.firstName = solution.firstName;
+          if (this.testCompleted) {
+            this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
+            return;
           }
-      } catch(e){
+          this.secondName = solution.secondName;
+          this.startTime = solution.startTime;
+          if (solution.questions) {
+            this.questions = solution.questions;
+          }
+          this.totalTimeInSeconds = this.initialTotalTime - (new Date().getTime() - new Date(solution.startTime).getTime()) / 1000;
+          this.triggerCountdownTimer();
+        }
+      } catch (e) {
         console.error(e);
       }
     },
-    async startTest(){
+    async startTest() {
       this.startTime = new Date().getTime();
       const startTest = new Object({
         testId: this.test.id,
@@ -129,17 +142,17 @@ export default {
       await firebaseService.startTest(startTest);
       this.triggerCountdownTimer();
     },
-    triggerCountdownTimer(){
+    triggerCountdownTimer() {
       this.timerInterval = setInterval(this.updateTimer, 1000);
     },
-    updateTimer(){
+    updateTimer() {
       this.totalTimeInSeconds = this.totalTimeInSeconds - 1;
-      if(this.totalTimeInSeconds < 1){
+      if (this.totalTimeInSeconds < 1) {
         console.log('time is out. Solution will be submitted automatically');
         this.submitSolution();
       }
     },
-    constructSolution(){
+    constructSolution() {
       const questionsCopy = JSON.parse(JSON.stringify(this.questions));
       const newQuestions = questionsCopy.map(q => new Object({
         id: q.id,
@@ -152,8 +165,8 @@ export default {
         questions: newQuestions
       });
     },
-    async saveProgress(){
-      if(!this.testStarted){
+    async saveProgress() {
+      if (!this.testStarted) {
         console.log('before saving, test has to be started.');
       } else {
         console.log('saving progress...');
@@ -161,7 +174,7 @@ export default {
         await firebaseService.saveProgress(solution);
       }
     },
-    async submitSolution(){
+    async submitSolution() {
       console.log('submitting solution...');
       const solution = this.constructSolution();
       await firebaseService.submitSolution(solution);
@@ -172,12 +185,32 @@ export default {
 }
 </script>
 
-<style>
-.test-header-container {
-  margin: 0 auto;
-  display: grid;
-  grid-gap: 1rem;
-  font-size:1em;
-  grid-template-columns: 2fr 1fr;
-}
+<style scoped lang="scss">
+  .name-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-right: 2em;
+
+      .start-test {
+        margin-top: .5em;
+      }
+    }
+  }
+
+  .submit-test {
+    margin-top: 2em;
+  }
+
+  .questions {
+    width: 100%;
+    background-color: #232931;
+    border-radius: 15px;
+    padding: 1em;
+    margin-top: 2em;
+  }
 </style>

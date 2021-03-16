@@ -8,6 +8,24 @@ a:-webkit-any-link {
     text-decoration: none;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #232931;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom right, #4ECCA3, #00C2FF);
+    padding: 2em 0;
+    border-radius: 50px;
+}
+
+p {
+    margin: 0;
+}
+
 body {
     color: #eee;
     font-family: 'Poppins', sans-serif;
@@ -33,6 +51,18 @@ body {
     border-radius: 15px !important;
 }
 
+.p-dialog {
+    border: 1px solid #3A3F46 !important;
+}
+
+.p-dialog-header {
+    background: #232931 !important;
+}
+
+.p-dialog-content {
+    background: #232931 !important;
+}
+
 .base-background {
     padding: 1em;
     background-color: #232931;
@@ -43,6 +73,12 @@ input {
     border: 1px solid #4a515a !important;
     border-radius: 15px !important;
     background: #232931 !important;
+}
+
+textarea {
+    border: 1px solid #4a515a !important;
+    border-radius: 15px !important;
+    background: #3A3F46 !important;
 }
 
 .primary-btn {

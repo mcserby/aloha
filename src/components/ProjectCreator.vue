@@ -5,7 +5,7 @@
     <div class="base-background">
       <h3>Enter a project name</h3>
       <Input type="text" placeholder="Project Name" v-model="newProjectName" />
-      <Button class="primary-btn" @click="create()"> Create </Button>
+      <Button class="primary-btn create-test" @click="create()"> Create </Button>
     </div>
   </div>
 </template>
@@ -41,5 +41,9 @@ export default {
 <style scoped lang="scss">
  h3 {
    margin: 0;
+ }
+
+ .create-test {
+   margin-left: 2em !important;
  }
 </style>
