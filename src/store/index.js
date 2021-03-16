@@ -5,21 +5,20 @@ const store = createStore({
        return {
           isLoggedIn: false,
           userName: null,
-          userId: null,
           projects: [],
-          selectedStageId: null
+          selectedStageId: null,
+          testIds: [],
+          solutions: [],
        }
     },
     mutations: {
       loginUser(state, user) {
         state.isLoggedIn = true;
         state.userName = user.displayName;
-        state.userId = user.uid;
       },
       logout(state) {
         state.isLoggedIn = false;
         state.userName = null;
-        state.userId = null;
       },
       addProject(state, project){
         state.projects.push(project);
@@ -38,6 +37,19 @@ const store = createStore({
       },
       selectStage(state, stageId){
         state.selectedStageId = stageId;
+      },
+      updateTestIds(state, testIds){
+        state.testIds.splice(0, state.testIds.length, ...testIds);
+      },
+      updateSolutions(state, solutions){
+        state.solutions.splice(0, state.solutions.length, ...solutions);
+      },
+      updateSolution(state, solutionQuestions){
+        const solutionIndex = state.solutions.findIndex(s => s.testId === solutionQuestions.testId);
+        if(solutionIndex >= 0){
+          const solution = state.solutions[solutionIndex];
+          solution.questions.splice(0, solution.questions.length, ...solutionQuestions.questions);
+        }
       }
 
     }

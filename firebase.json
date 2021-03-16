@@ -1,6 +1,5 @@
 {
   "firestore": {
-    "rules": "yes",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
@@ -18,9 +17,6 @@
     ]
   },
   "storage": {
-    "rules": "storage.rules"
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
-  }
+   "rules": "storage.rules"
+ }
 }

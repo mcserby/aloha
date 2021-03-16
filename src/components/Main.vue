@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>This is Main module!</div>
     <Projects :projects="projects" />
   </div>
 </template>
@@ -12,12 +11,10 @@ import Projects from './Projects';
 export default {
   name: 'Main',
   data() {
-    return {
-    }
+    return {}
   },
   components: {
     Projects
-
   },
   computed: {
     projects(){
