@@ -4,6 +4,14 @@
       Project Id: {{ project.id }}
     </div>
     <PageHeader :title="'Project: ' + project.name"/>
+
+    <div class="test-duration">
+      <div class="form-group">
+        <label>Test Duration: (min)</label>
+        <Input maxlength="3" size="3" type="text" v-model="testDuration"/>
+      </div>
+    </div>
+
     <div class="test-actions">
       <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
       <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
@@ -81,15 +89,29 @@ export default {
       displayTopicEditor: false,
       newProjectName: '',
       newContributor: '',
+      testDuration: 120,
     }
   },
-  mounted() {
+  mounted(){
+    this.testDuration = this.projectTestDuration;
   },
   components: {
     PageHeader,
     StageSelector,
     StageEditor,
     TestGenerator
+  },
+  watch: {
+    projectIsLoaded(newProjectIsLoaded){
+      if(newProjectIsLoaded){
+        this.testDuration = this.project.testDuration || 125;
+      }
+    },
+    testDuration(newTestDuration){
+      if(this.projectIsLoaded){
+        this.updateTestDuration(parseInt(newTestDuration));
+      }
+    }
   },
   computed: {
     projectId() {
@@ -100,6 +122,9 @@ export default {
     },
     project() {
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
+    },
+    projectTestDuration(){
+      return this.project.testDuration;
     },
     contributors() {
       return this.project.owners;
@@ -194,6 +219,10 @@ export default {
     async handleTopicRemove() {
       const newTopics = this.topics;
       const updatedProject = await firebaseService.updateTopics(this.project.id, newTopics);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async updateTestDuration(newTestDuration) {
+      const updatedProject = await firebaseService.updateTestDuration(this.project.id, newTestDuration);
       this.$store.commit('updateProject', updatedProject);
     }
   }

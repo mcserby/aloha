@@ -79,6 +79,7 @@ export default {
       return {
         projectId: this.project.id,
         projectName: this.project.name,
+        testDuration: this.project.testDuration,
         questions: testQuestions,
         topics: topics,
       }
