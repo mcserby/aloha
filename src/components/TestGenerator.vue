@@ -73,7 +73,7 @@ export default {
       this.project.topics.forEach(topic => {
         topics.push({
           technology: topic,
-          value: 0
+          value: 5
         })
       })
       return {
