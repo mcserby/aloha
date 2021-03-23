@@ -114,10 +114,10 @@ export default {
       document.addEventListener('keydown', this._keyListener.bind(this));
     },
 
-    async updatePreference (params) {
-      const newTopics = this.topics;
-      newTopics.push(params)
-      await firebaseService.updateTestTopicPreferences(this.testId, newTopics);
+    async updatePreference (updatedTopic) {
+      const topicIndex = this.topics.findIndex(t => t.technology === updatedTopic.technology)
+      this.topics.splice(topicIndex, 1, updatedTopic)
+      await firebaseService.updateTestTopicPreferences(this.testId, this.topics);
     },
 
     async loadTest(testId) {
