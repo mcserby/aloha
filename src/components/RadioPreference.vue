@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      preferenceValue: "0",
+      preferenceValue: "5",
     }
   },
   mounted() {
