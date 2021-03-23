@@ -2,9 +2,11 @@
   <div class="base-container">
     <PageHeader title="Creating A New Project"></PageHeader>
 
-    <div class="base-background">
-      <h3>Enter a project name</h3>
+    <div class="base-background project-creator">
+      <h4>Enter a project name</h4>
       <Input type="text" placeholder="Project Name" v-model="newProjectName" />
+      <h4 class="topics-title">Project Topics<span> (comma separated)</span></h4>
+      <Chips class="topics-input" separator="," v-model="projectTopics"/>
       <Button class="primary-btn create-test" @click="create()"> Create </Button>
     </div>
   </div>
@@ -19,7 +21,8 @@ export default {
   name: 'ProjectCreator',
   data() {
     return {
-      newProjectName: ''
+      newProjectName: '',
+      projectTopics: [],
     }
   },
   components: {
@@ -29,7 +32,7 @@ export default {
   },
   methods: {
     async create(){
-      const project = await firebaseService.addProject(this.newProjectName);
+      const project = await firebaseService.addProject(this.newProjectName, this.projectTopics);
       console.log('project', project);
       this.$store.commit('addProject', project);
       this.$router.push({name: 'Project', params: {'projectId': project.id}})
@@ -39,11 +42,33 @@ export default {
 </script>
 
 <style scoped lang="scss">
- h3 {
+ h4 {
    margin: 0;
+
+   span {
+     font-size: 10px;
+     opacity: 0.5;
+   }
+ }
+
+ .topics-title {
+   margin-top: 1em;
+ }
+
+ .topics-input {
+   margin-bottom: 1em;
+   width: 100%;
+ }
+
+ .project-creator {
+   width: 100%;
+   max-width: 100%;
+   display: flex;
+   flex-direction: column;
  }
 
  .create-test {
-   margin-left: 2em !important;
+   width: fit-content;
  }
+
 </style>

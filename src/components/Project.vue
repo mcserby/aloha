@@ -4,11 +4,19 @@
       Project Id: {{ project.id }}
     </div>
     <PageHeader :title="'Project: ' + project.name"/>
+
+    <div class="test-duration">
+      <div class="form-group">
+        <label>Test Duration: (min)</label>
+        <Input maxlength="3" size="3" type="text" v-model="testDuration"/>
+      </div>
+    </div>
+
     <div class="test-actions">
       <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
-      <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors
-      </Button>
+      <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
       <Button class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <Button class="rnd-btn test-action-button" @click="displayTopicEditor = !displayTopicEditor">Topic Editor</Button>
       <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
                    v-if="projectIsLoaded">
         <Button class="primary-btn" label="Go To Solutions"></Button>
@@ -50,6 +58,15 @@
       </div>
     </Dialog>
 
+    <Dialog :style="{width: '600px'}"
+            :dismissableMask="true"
+            :modal="true"
+            v-model:visible="displayTopicEditor"
+            header="Topic Editor"
+    >
+      <Chips @add="handleTopicAdd($event)" @remove="handleTopicRemove()" separator="," v-model="this.project.topics" />
+    </Dialog>
+
 
   </div>
 </template>
@@ -69,17 +86,32 @@ export default {
     return {
       displayContributors: false,
       displayTestGenerator: false,
+      displayTopicEditor: false,
       newProjectName: '',
       newContributor: '',
+      testDuration: 120,
     }
   },
-  mounted() {
+  mounted(){
+    this.testDuration = this.projectTestDuration;
   },
   components: {
     PageHeader,
     StageSelector,
     StageEditor,
     TestGenerator
+  },
+  watch: {
+    projectIsLoaded(newProjectIsLoaded){
+      if(newProjectIsLoaded){
+        this.testDuration = this.project.testDuration || 125;
+      }
+    },
+    testDuration(newTestDuration){
+      if(this.projectIsLoaded){
+        this.updateTestDuration(parseInt(newTestDuration));
+      }
+    }
   },
   computed: {
     projectId() {
@@ -91,11 +123,17 @@ export default {
     project() {
       return this.$store.state.projects.filter(p => p.id === this.projectId)[0] || {stages: []};
     },
+    projectTestDuration(){
+      return this.project.testDuration;
+    },
     contributors() {
       return this.project.owners;
     },
     stages() {
       return this.project.stages;
+    },
+    topics() {
+      return this.project.topics;
     },
     selectedStage() {
       const selectedStageId = this.$store.state.selectedStageId;
@@ -171,6 +209,20 @@ export default {
       const newContributors = JSON.parse(JSON.stringify(this.contributors));
       newContributors.push(this.newContributor.trim());
       const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async handleTopicAdd(e) {
+      const newTopics = e.value;
+      const updatedProject = await firebaseService.updateTopics(this.project.id, newTopics);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async handleTopicRemove() {
+      const newTopics = this.topics;
+      const updatedProject = await firebaseService.updateTopics(this.project.id, newTopics);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async updateTestDuration(newTestDuration) {
+      const updatedProject = await firebaseService.updateTestDuration(this.project.id, newTestDuration);
       this.$store.commit('updateProject', updatedProject);
     }
   }
