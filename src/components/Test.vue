@@ -117,8 +117,7 @@ export default {
     async updatePreference (params) {
       const newTopics = this.topics;
       newTopics.push(params)
-      const updatedTest = await firebaseService.updateTestTopicPreferences(this.testId, newTopics);
-      this.$store.commit('updateTest', updatedTest);
+      await firebaseService.updateTestTopicPreferences(this.testId, newTopics);
     },
 
     async loadTest(testId) {

@@ -167,8 +167,6 @@ export default {
     await db.collection("tests").doc(testId).update({
       topics: topics
     });
-    const test = await db.collection("tests").doc(testId).get()
-    return {id: test.id, ...test.data()};
   },
 
   saveProgress: async function(solution){

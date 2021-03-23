@@ -36,14 +36,6 @@ const store = createStore({
                 state.projects.push(project);
             }
         },
-        updateTest(state, test) {
-            const testIndex = state.tests.findIndex(t => t.id === test.id);
-            if (testIndex >= 0) {
-                state.tests.splice(testIndex, 1, test);
-            } else {
-                state.tests.push(test);
-            }
-        },
         selectStage(state, stageId) {
             state.selectedStageId = stageId;
         },
