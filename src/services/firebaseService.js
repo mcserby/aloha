@@ -92,6 +92,15 @@ export default {
     return {id: project.id, ...project.data()};
   },
 
+  updateTestDuration: async function(projectId, testDuration){
+    const db = firebase.firestore();
+    await db.collection("projects").doc(projectId).update({
+        testDuration: testDuration
+    });
+    const project = await db.collection("projects").doc(projectId).get();
+    return {id: project.id, ...project.data()};
+  },
+
   storeTests: async function(tests){
     var db = firebase.firestore();
     var batch = db.batch();
