@@ -16,9 +16,12 @@
         </div>
       </div>
       <div class="radio-preferences">
-        <h2>Technology Preferences</h2>
+        <h2 class="preferences-title">Technology Preferences</h2>
+        <p class="faded-description">
+          1: Least Preferable <i class="pi pi-minus"></i> 5: Most Preferable
+        </p>
         <div class="preference-cards">
-          <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :for-technology="topic.technology"/>
+          <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :value="topic.value" :for-technology="topic.technology"/>
         </div>
       </div>
     </div>
@@ -244,7 +247,15 @@ export default {
   .preference-cards {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    grid-gap: 1em;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-gap: 3em;
+  }
+
+  .preferences-title {
+    margin-bottom: 0;
+  }
+  .faded-description {
+    margin-bottom: 1em;
+    opacity: 0.5;
   }
 </style>
