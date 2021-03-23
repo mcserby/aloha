@@ -15,6 +15,12 @@
           <Button @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
         </div>
       </div>
+      <div class="radio-preferences">
+        <h2>Technology Preferences</h2>
+        <div class="preference-cards">
+          <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :for-technology="topic.technology"/>
+        </div>
+      </div>
     </div>
     <div v-if="testStarted" class="questions">
       <div v-for="question in questions" v-bind:key="question.id">
@@ -30,6 +36,7 @@
 import firebaseService from '../services/firebaseService';
 import TestQuestion from './TestQuestion';
 import PageHeader from "@/components/PageHeader";
+import RadioPreference from "@/components/RadioPreference";
 
 export default {
   name: 'Test',
@@ -44,6 +51,7 @@ export default {
       testCompleted: false,
       startTime: null,
       questions: [],
+      topics: [],
     }
   },
   mounted() {
@@ -55,7 +63,8 @@ export default {
   },
   components: {
     PageHeader,
-    TestQuestion
+    TestQuestion,
+    RadioPreference
   },
   computed: {
     nameFilled() {
@@ -105,11 +114,19 @@ export default {
       document.addEventListener('keydown', this._keyListener.bind(this));
     },
 
+    async updatePreference (params) {
+      const newTopics = this.topics;
+      newTopics.push(params)
+      const updatedTest = await firebaseService.updateTestTopicPreferences(this.testId, newTopics);
+      this.$store.commit('updateTest', updatedTest);
+    },
+
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
         const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
+        this.topics = this.test.topics;
         if (solution) {
           console.log('solution', solution);
           this.testCompleted = solution.completed || false;
@@ -212,5 +229,20 @@ export default {
     border-radius: 15px;
     padding: 1em;
     margin-top: 2em;
+  }
+
+  .radio-preferences {
+    width: 100%;
+  }
+
+  .test-header-container {
+    width: 100%;
+  }
+
+  .preference-cards {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-gap: 1em;
   }
 </style>

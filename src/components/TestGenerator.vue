@@ -69,10 +69,18 @@ export default {
           delete testQuestion.solution;
           return testQuestion;
         });
+      const topics = [];
+      this.project.topics.forEach(topic => {
+        topics.push({
+          technology: topic,
+          value: 0
+        })
+      })
       return {
         projectId: this.project.id,
         projectName: this.project.name,
-        questions: testQuestions
+        questions: testQuestions,
+        topics: topics,
       }
     },
     getRandomInt(max) {

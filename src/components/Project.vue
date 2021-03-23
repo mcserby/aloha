@@ -6,9 +6,9 @@
     <PageHeader :title="'Project: ' + project.name"/>
     <div class="test-actions">
       <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
-      <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors
-      </Button>
+      <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
       <Button class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <Button class="rnd-btn test-action-button" @click="displayTopicEditor = !displayTopicEditor">Topic Editor</Button>
       <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
                    v-if="projectIsLoaded">
         <Button class="primary-btn" label="Go To Solutions"></Button>
@@ -50,6 +50,15 @@
       </div>
     </Dialog>
 
+    <Dialog :style="{width: '600px'}"
+            :dismissableMask="true"
+            :modal="true"
+            v-model:visible="displayTopicEditor"
+            header="Topic Editor"
+    >
+      <Chips @add="handleTopicAdd($event)" @remove="handleTopicRemove()" separator="," v-model="this.project.topics" />
+    </Dialog>
+
 
   </div>
 </template>
@@ -69,6 +78,7 @@ export default {
     return {
       displayContributors: false,
       displayTestGenerator: false,
+      displayTopicEditor: false,
       newProjectName: '',
       newContributor: '',
     }
@@ -96,6 +106,9 @@ export default {
     },
     stages() {
       return this.project.stages;
+    },
+    topics() {
+      return this.project.topics;
     },
     selectedStage() {
       const selectedStageId = this.$store.state.selectedStageId;
@@ -171,6 +184,16 @@ export default {
       const newContributors = JSON.parse(JSON.stringify(this.contributors));
       newContributors.push(this.newContributor.trim());
       const updatedProject = await firebaseService.updateContributors(this.project.id, newContributors);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async handleTopicAdd(e) {
+      const newTopics = e.value;
+      const updatedProject = await firebaseService.updateTopics(this.project.id, newTopics);
+      this.$store.commit('updateProject', updatedProject);
+    },
+    async handleTopicRemove() {
+      const newTopics = this.topics;
+      const updatedProject = await firebaseService.updateTopics(this.project.id, newTopics);
       this.$store.commit('updateProject', updatedProject);
     }
   }
