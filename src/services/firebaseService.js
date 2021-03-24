@@ -50,11 +50,12 @@ export default {
     }
   },
 
-  addProject: async function(projectName){
+  addProject: async function(projectName, topics){
     try {
       const db = firebase.firestore();
       const docRef = await db.collection("projects").add({
         name: projectName,
+        topics: topics,
         stages: [{id: uuidv4(), name:'default', questions: []}],
         owners: [firebase.auth().currentUser.email]
       });
@@ -87,6 +88,15 @@ export default {
     const db = firebase.firestore();
     await db.collection("projects").doc(projectId).update({
         owners: contributors
+    });
+    const project = await db.collection("projects").doc(projectId).get()
+    return {id: project.id, ...project.data()};
+  },
+
+  updateTopics: async function(projectId, topics) {
+    const db = firebase.firestore();
+    await db.collection("projects").doc(projectId).update({
+      topics: topics
     });
     const project = await db.collection("projects").doc(projectId).get()
     return {id: project.id, ...project.data()};
@@ -150,6 +160,13 @@ export default {
     } catch(e){
       console.error(e);
     }
+  },
+
+  updateTestTopicPreferences: async function(testId, topics){
+    const db = firebase.firestore();
+    await db.collection("tests").doc(testId).update({
+      topics: topics
+    });
   },
 
   saveProgress: async function(solution){
