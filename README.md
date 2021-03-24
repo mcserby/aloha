@@ -6,6 +6,8 @@ This is a tool that allows companies (and individuals) to create custom tests fo
 
 The solutions page offers the possibility to evaluate candidates by offering grades per each question.
 
+The tool is 100% frontend code. The data is stored in a firebase project.
+
 
 ## Project setup
 ```
