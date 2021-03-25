@@ -8,13 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
 export default {
   init: function(){
     const firebaseConfig = {
-      apiKey: "AIzaSyA0vFKdFyd66tjKy2AGV9R77aQKprErVBY",
-      authDomain: "accesa-internship-portal.firebaseapp.com",
-      projectId: "accesa-internship-portal",
-      storageBucket: "accesa-internship-portal.appspot.com",
-      messagingSenderId: "155873673179",
-      appId: "1:155873673179:web:63029b36e3c6fd72b5b1fe",
-      measurementId: "G-BSTVSHBM44"
+      apiKey: process.env.VUE_APP_API_KEY,
+      authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+      projectId: process.env.VUE_APP_PROJECT_ID,
+      storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+      messagingSenderId: process.env.VUE_APP_MESSAGE_ID_SENDER,
+      appId: process.env.VUE_APP_ID,
+      measurementId: process.env.VUE_APP_MEASUREMENT_ID
     };
     firebase.initializeApp(firebaseConfig);
   },
