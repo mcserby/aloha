@@ -8,12 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
 export default {
   init: function(){
     const firebaseConfig = {
-      apiKey: "AIzaSyDL9ZtlDKWoMygVX058rWiKsklIb9gFn8U",
-      authDomain: "aloha-e6c64.firebaseapp.com",
-      projectId: "aloha-e6c64",
-      storageBucket: "aloha-e6c64.appspot.com",
-      messagingSenderId: "1094724239724",
-      appId: "1:1094724239724:web:1b061a5cf4add72829b349"
+      apiKey: "AIzaSyA0vFKdFyd66tjKy2AGV9R77aQKprErVBY",
+      authDomain: "accesa-internship-portal.firebaseapp.com",
+      projectId: "accesa-internship-portal",
+      storageBucket: "accesa-internship-portal.appspot.com",
+      messagingSenderId: "155873673179",
+      appId: "1:155873673179:web:63029b36e3c6fd72b5b1fe",
+      measurementId: "G-BSTVSHBM44"
     };
     firebase.initializeApp(firebaseConfig);
   },
