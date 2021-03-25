@@ -1,5 +1,14 @@
 # aloha
 
+## project description
+
+This is a tool that allows companies (and individuals) to create custom tests for evaluating candidates applying for a job/internship/position. Logged in users (with google account) can create evaluation projects. A project is a collection of test questions grouped into stages (or topics). The project allows the owners to generate unique tests, each containing a unique identifier for each applicant. For each stage, a random question from the collection of questions in that stage is chosen to be part of the test. The test progress can be saved (with Ctrl + S) and when the time is up, it will be automatically submitted as a solution.
+
+The solutions page offers the possibility to evaluate candidates by offering grades per each question.
+
+The tool is 100% frontend code. The data is stored in a firebase project.
+
+
 ## Project setup
 ```
 npm install
@@ -20,19 +29,11 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### deploy to production:
+
+```
+npm run build
+firebase deploy
+```
 
 
-ALOHA
-
-create project (eg. Internship 2021)
- - owner
- - editors
-
-test step (1 -> n)
-
-each step (1 -> n problems, questions)
-
-Generate tests -> with URL
-save solution.

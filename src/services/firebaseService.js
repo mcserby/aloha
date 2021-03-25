@@ -8,12 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
 export default {
   init: function(){
     const firebaseConfig = {
-      apiKey: "AIzaSyDL9ZtlDKWoMygVX058rWiKsklIb9gFn8U",
-      authDomain: "aloha-e6c64.firebaseapp.com",
-      projectId: "aloha-e6c64",
-      storageBucket: "aloha-e6c64.appspot.com",
-      messagingSenderId: "1094724239724",
-      appId: "1:1094724239724:web:1b061a5cf4add72829b349"
+      apiKey: process.env.VUE_APP_API_KEY,
+      authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+      projectId: process.env.VUE_APP_PROJECT_ID,
+      storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+      messagingSenderId: process.env.VUE_APP_MESSAGE_ID_SENDER,
+      appId: process.env.VUE_APP_ID,
+      measurementId: process.env.VUE_APP_MEASUREMENT_ID
     };
     firebase.initializeApp(firebaseConfig);
   },
