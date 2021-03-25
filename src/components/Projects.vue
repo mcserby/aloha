@@ -6,7 +6,7 @@
         <h4>{{project.name}}</h4>
         <Button @click="selectProject(project.id)" class="primary-btn start-button" label="Start Now"></Button>
       </div>
-      <div @click="addNewProject()" class="project-card new-project">
+      <div v-if="isLoggedIn" @click="addNewProject()" class="project-card new-project">
         <i class="pi pi-plus-circle"></i>
         New Project
       </div>
@@ -24,6 +24,9 @@ export default {
     PageHeader
   },
   computed: {
+    isLoggedIn(){
+      return this.$store.state.isLoggedIn;
+    },
   },
   methods: {
     selectProject(projectId){

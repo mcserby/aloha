@@ -44,9 +44,12 @@ export default {
         return 0;
       }
       const result = parseFloat(100 * this.questions.filter(q => q.score > -1).length / this.questions.length).toFixed(2);
-      return result;
+      return parseInt(result);
     }
 
+  },
+  mounted() {
+    console.log(this.percentageOfCompletedQuestions)
   },
   methods: {
     async updateQuestion(question) {
