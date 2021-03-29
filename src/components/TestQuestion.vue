@@ -2,7 +2,7 @@
   <div class="question-container">
     <div class="question-area">
       <h2>Q: </h2>
-      <p>{{question.text}}</p>
+      <p><vue3-markdown-it :source='question.text' /></p>
     </div>
     <div>
       <Textarea :autoResize="true" class="answer-area" placeholder="Answer" v-model="answer" :readonly="!isEditable" />
