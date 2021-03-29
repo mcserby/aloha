@@ -3,6 +3,9 @@
     <PageHeader :title="'Applicant: ' + solution.firstName + ' ' + solution.secondName">
       Aplicant: {{ solution.firstName }} {{ solution.secondName }}
     </PageHeader>
+    <div v-for="interval in outOfTestIntervals" v-bind:key="interval.timeSinceStart">
+      minute: {{interval.timeSinceStart}}, duration: {{interval.duration}} seconds
+    </div>
     <div class="solution-questions" v-for="question in questions" v-bind:key="question.id">
       <SolutionQuestion :question="question" @update-question="updateQuestion"/>
     </div>
@@ -38,6 +41,12 @@ export default {
     },
     questions() {
       return this.solution.questions || [];
+    },
+    outOfTestIntervals(){
+      return (this.solution.outOfFocus || []).map(oof => new Object({
+        timeSinceStart: (oof.time - this.solution.startTime)/60000,
+        duration: oof.timeGone/1000
+      }));
     },
     percentageOfCompletedQuestions() {
       if (this.questions.length == 0) {

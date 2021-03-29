@@ -181,6 +181,17 @@ export default {
     }
   },
 
+  updateTestOutOfFocus: async function(outOfFocus){
+    try {
+      const db = firebase.firestore();
+      await db.collection("solutions").doc(outOfFocus.testId).update({
+        outOfFocus: firebase.firestore.FieldValue.arrayUnion({time: outOfFocus.time, timeGone: outOfFocus.timeGone})
+      });
+    } catch(e){
+      console.error(e);
+    }
+  },
+
   loadSolution: async function(solutionId){
     try {
       const db = firebase.firestore();
