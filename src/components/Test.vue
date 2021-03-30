@@ -12,7 +12,7 @@
           <Input type="text" v-model="secondName"/>
         </div>
         <div class="form-group">
-          <Button @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
+          <Button :disabled="testStarted" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
         </div>
       </div>
       <div class="radio-preferences">
@@ -55,6 +55,7 @@ export default {
       startTime: null,
       questions: [],
       topics: [],
+      leaveTime: null,
     }
   },
   mounted() {
@@ -63,6 +64,7 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this._keyListener);
+    this.stopMonitorOutOfFocusEvent();
   },
   components: {
     PageHeader,
@@ -163,6 +165,7 @@ export default {
       });
       await firebaseService.startTest(startTest);
       this.triggerCountdownTimer();
+      this.startMonitorOutOfFocusEvent();// TODO: start monitor out of focus intervals
     },
     triggerCountdownTimer() {
       this.timerInterval = setInterval(this.updateTimer, 1000);
@@ -201,7 +204,31 @@ export default {
       const solution = this.constructSolution();
       await firebaseService.submitSolution(solution);
       clearInterval(this.timerInterval);
+      this.stopMonitorOutOfFocusEvent();
       this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
+    },
+    focusHandler(){
+      const timeGone = new Date() - this.leaveTime;
+      if(timeGone > 2000){
+        const outOfFocus = new Object({
+          testId: this.test.id,
+          time: new Date().getTime(),
+          timeGone: timeGone
+        });
+        firebaseService.updateTestOutOfFocus(outOfFocus);
+      }
+    },
+    startMonitorOutOfFocusEvent(){
+      console.log('adding out of focus events');
+      this._blurHandler = () => {
+        this.leaveTime = new Date();
+      };
+      window.addEventListener('blur', this._blurHandler);
+      window.addEventListener('focus', this.focusHandler);
+    },
+    stopMonitorOutOfFocusEvent(){
+      window.removeEventListener('blur', this._blurHandler);
+      window.removeEventListener('focus', this.focusHandler);
     }
   }
 }
