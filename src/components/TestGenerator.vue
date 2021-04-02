@@ -6,7 +6,7 @@
     </div>
     <div>
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
-      <Button class="test-generator-button" @click="clearTestsForProject()">Clear all tests</Button>
+      <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
     </div>
     <div class="generated-tests">
       <div>Generated Tests:</div>
@@ -56,9 +56,10 @@ export default {
       const testIds = await firebaseService.loadTestIds(this.project.id);
       this.$store.commit('updateTestIds', testIds);
     },
-    async clearTestsForProject(){
-      await firebaseService.clearTestsForProject(this.project.id);
+    async clearTestsAndSolutionsForProject(){
+      await firebaseService.clearTestsAndSolutionsForProject(this.project.id);
       this.$store.commit('updateTestIds', []);
+      this.$store.commit('updateSolutions', []);
     },
     generateTest(){
       const testQuestions = this.project.stages

@@ -142,7 +142,7 @@ export default {
       return {id: test.id, ...test.data()};
   },
 
-  clearTestsForProject: async function(projectId){
+  clearTestsAndSolutionsForProject: async function(projectId){
     const db = firebase.firestore();
     const tests = await db.collection("tests")
       .where("projectId", "==", projectId)
@@ -151,6 +151,14 @@ export default {
     tests.forEach(t => testIds.push(t.id));
     testIds.forEach((id) => {
       db.collection("tests").doc(id).delete();
+    });
+    const solutions = await db.collection("solutions")
+      .where("projectId", "==", projectId)
+      .get();
+    const solutionIds = [];
+    solutions.forEach(s => solutionIds.push(s.id));
+    solutionIds.forEach((id) => {
+      db.collection("solutions").doc(id).delete();
     });
   },
 
