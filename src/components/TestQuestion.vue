@@ -1,7 +1,7 @@
 <template>
   <div class="question-container">
     <div class="question-area">
-      <h2>Q: </h2>
+      <h3>Q({{question.points}}p): </h3>
       <p><vue3-markdown-it :source='question.text' /></p>
     </div>
     <div>
@@ -44,8 +44,8 @@ export default {
     display: flex;
     align-items: center;
 
-    h2 {
-      margin: 0 .5em 0 0;
+    h3 {
+      margin: 0 .7em 0 0;
       color: #4ECCA3;
     }
   }

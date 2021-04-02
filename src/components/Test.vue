@@ -183,6 +183,7 @@ export default {
         id: q.id,
         text: q.text,
         answer: q.answer,
+        points: q.points,
         score: -1
       }));
       return new Object({
