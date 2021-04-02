@@ -3,7 +3,7 @@
     Stage Selector
     <div v-for="stage in stages" v-bind:key="stage.id" class="stage">
       <div @click="selectStage(stage)">
-      {{stage.name}}
+      ({{stage.points || 0}}p) {{stage.name}}
       </div>
       <div>
         <Button class="rnd-btn" @click="deleteStage(stage)" icon="pi pi-times"></Button>
@@ -15,6 +15,7 @@
       </div>
       <div v-else>
         <Input type="text" placeholder="New Stage..." v-model="newStageName" />
+        <Input type="text" v-model="newStagePoints" />
         <Button class="rnd-btn save-new-stage" @click="saveStage()" label="Save"></Button>
       </div>
     </div>
@@ -32,6 +33,7 @@ export default {
     return {
       newStageEditMode: false,
       newStageName: '',
+      newStagePoints: 10,
     }
   },
   components: {
@@ -44,7 +46,12 @@ export default {
       console.log('enableNewStage');
     },
     saveStage(){
-      this.$emit('saveNewStage', {id: uuidv4(), name: this.newStageName, questions: []});
+      this.$emit('saveNewStage', {
+        id: uuidv4(),
+        name: this.newStageName,
+        points: parseInt(this.newStagePoints),
+        questions: []
+      });
       this.newStageName = '';
       this.newStageEditMode = false;
     },

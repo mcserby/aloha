@@ -68,6 +68,7 @@ export default {
           const pos = this.getRandomInt(s.questions.length);
           let testQuestion = JSON.parse(JSON.stringify(s.questions[pos]));
           delete testQuestion.solution;
+          testQuestion.points = s.points || 0;
           return testQuestion;
         });
       const topics = [];
