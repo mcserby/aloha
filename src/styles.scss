@@ -77,8 +77,19 @@ input {
 
 textarea {
     border: 1px solid #4a515a !important;
-    border-radius: 15px !important;
+    border-radius: 5px !important;
     background: #3A3F46 !important;
+    padding-left: 5px;
+}
+
+.prism-editor__editor {
+    padding-left: 5px !important;
+}
+
+.prism-editor__textarea:focus {
+    box-shadow: 0 0 0 1px #a7d8a9;
+    border-color: #81C784;
+    outline: none;
 }
 
 .primary-btn {

@@ -17,7 +17,11 @@ import 'primevue/resources/themes/vela-green/theme.css';
 
 const app = createApp(App);
 
-app.use(router).use(store).use(PrimeVue, {ripple: true}).mount('#app');
+app
+    .use(router)
+    .use(store)
+    .use(PrimeVue, {ripple: true})
+    .mount('#app');
 
 app.component('Button', Button)
 app.component('Textarea', Textarea);

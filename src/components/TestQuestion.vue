@@ -5,21 +5,31 @@
       <p>{{question.text}}</p>
     </div>
     <div>
-      <Textarea :autoResize="true" class="answer-area" placeholder="Answer" v-model="answer" :readonly="!isEditable" />
+      <prism-editor class="answer-area" v-model="answer" ignoreTabKey :highlight="highlighter" line-numbers></prism-editor>
     </div>
   </div>
 </template>
 
 <script>
+// import Prism Editor
+import { PrismEditor } from 'vue-prism-editor';
+import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
+// import highlighting library (you can use any library you want just return html string)
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism-tomorrow.css';
 
 export default {
   name: 'TestQuestion',
   props: ['question', 'isEditable'],
   data() {
     return {
+      lang: 'java'
     }
   },
   components: {
+    PrismEditor
   },
   computed: {
     answer: {
@@ -32,6 +42,9 @@ export default {
     }
   },
   methods: {
+    highlighter(code) {
+      return highlight(code, languages.js);
+    },
   }
 }
 </script>
@@ -48,9 +61,5 @@ export default {
       margin: 0 .5em 0 0;
       color: #4ECCA3;
     }
-  }
-  .answer-area {
-    border-radius: 15px;
-    width: 100%;
   }
 </style>
