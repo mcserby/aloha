@@ -15,7 +15,7 @@
     <div class="test-actions">
       <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
       <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
-      <Button class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <Button :disabled="stages[0]?.questions.length < 1" class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
       <Button class="rnd-btn test-action-button" @click="displayTopicEditor = !displayTopicEditor">Topic Editor</Button>
       <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
                    v-if="projectIsLoaded">
