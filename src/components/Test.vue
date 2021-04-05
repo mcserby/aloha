@@ -12,7 +12,11 @@
           <Input type="text" v-model="secondName"/>
         </div>
         <div class="form-group">
-          <Button :disabled="testStarted" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
+          <label>Email</label>
+          <Input type="text" v-model="email"/>
+        </div>
+        <div class="form-group">
+          <Button :disabled="startTestDisabled" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
         </div>
       </div>
       <div class="radio-preferences">
@@ -48,6 +52,7 @@ export default {
       test: {},
       firstName: '',
       secondName: '',
+      email: '',
       initialTotalTime: 600,
       totalTimeInSeconds: 600,
       timerInterval: null,
@@ -72,8 +77,11 @@ export default {
     RadioPreference
   },
   computed: {
-    nameFilled() {
-      return this.firstName && this.secondName;
+    startTestDisabled(){
+      return this.testStarted || !this.mandatoryDataFilled;
+    },
+    mandatoryDataFilled() {
+      return this.firstName && this.secondName && this.email;
     },
     testIsEditable() {
       console.log('testIsEditable', !this.testCompleted || this.testStarted);
@@ -143,6 +151,7 @@ export default {
             return;
           }
           this.secondName = solution.secondName;
+          this.email = solution.email;
           this.startTime = solution.startTime;
           if (solution.questions) {
             this.questions = solution.questions;
@@ -161,7 +170,8 @@ export default {
         startTime: this.startTime,
         projectId: this.test.projectId,
         firstName: this.firstName,
-        secondName: this.secondName
+        secondName: this.secondName,
+        email: this.email
       });
       await firebaseService.startTest(startTest);
       this.triggerCountdownTimer();
