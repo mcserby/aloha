@@ -1,13 +1,13 @@
 <template>
   <div>
     <div>
-      Q:  <Textarea :autoResize="true" v-model="currentText" />
+      Question:  <Textarea :autoResize="true" v-model="currentText" />
     </div>
     <div>
-      A: <Textarea :autoResize="true" v-model="currentAnswer" />
+      Answer template: <Textarea :autoResize="true" v-model="currentAnswer" />
     </div>
     <div v-if="showSolution">
-      S: <Textarea :autoResize="true" v-model="currentSolution" />
+      Solution: <Textarea :autoResize="true" v-model="currentSolution" />
     </div>
     <div>
       <Button class="rnd-btn question-button" @click="updateQuestion()">Update Question</Button>

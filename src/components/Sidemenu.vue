@@ -6,8 +6,8 @@
     <div class="sidemenu-items">
       <div class="tools">
         <p class="mini-title">Tools</p>
-        <p class="nav-item"><i class="pi pi-th-large"></i>Internships</p>
-        <p class="nav-item" @click="$router.push({name: 'Main'})"><i class="pi pi-book"></i>Evaluations</p>
+        <p v-if="isLoggedIn" class="nav-item"><i class="pi pi-th-large"></i>Internships</p>
+        <p v-if="isLoggedIn" class="nav-item" @click=" $router.push({name: 'Main'})"><i class="pi pi-book"></i>Evaluations</p>
       </div>
       <div class="user-details">
         <p class="mini-title">Other</p>

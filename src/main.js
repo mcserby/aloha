@@ -15,10 +15,11 @@ import { Field, Form } from 'vee-validate';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primevue/resources/themes/vela-green/theme.css';
+import VueMarkdownIt from 'vue3-markdown-it';
 
 const app = createApp(App);
 
-app.use(router).use(store).use(PrimeVue, {ripple: true}).mount('#app');
+app.use(router).use(store).use(PrimeVue, {ripple: true}).use(VueMarkdownIt).mount('#app');
 
 app.component('Button', Button)
 app.component('Textarea', Textarea);

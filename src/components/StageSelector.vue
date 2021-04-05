@@ -1,13 +1,10 @@
 <template>
   <div class="stage-selector">
     Stage Selector
-    <div v-for="stage in stages"
-         v-bind:key="stage.id"
-         class="stage"
-         @click="selectStage(stage)"
-         :class="activeStage === stage.name ? 'active-stage' : ''"
-         >
-      {{ stage.name }}
+    <div :class="activeStage === stage.name ? 'active-stage': ''" @click="selectStage(stage)" v-for="stage in stages" v-bind:key="stage.id" class="stage">
+      <div>
+      ({{stage.points || 0}}p) {{stage.name}}
+      </div>
       <div>
         <Button class="rnd-btn" @click="deleteStage(stage)" icon="pi pi-times"></Button>
       </div>
@@ -17,7 +14,8 @@
         <Button label="New Stage" class="rnd-btn"></Button>
       </div>
       <div v-else>
-        <Input type="text" placeholder="New Stage..." v-model="newStageName"/>
+        <Input type="text" placeholder="New Stage..." v-model="newStageName" />
+        <Input type="text" v-model="newStagePoints" />
         <Button class="rnd-btn save-new-stage" @click="saveStage()" label="Save"></Button>
       </div>
     </div>
@@ -26,7 +24,7 @@
 
 <script>
 
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   name: 'StageSelector',
@@ -36,6 +34,7 @@ export default {
       newStageEditMode: false,
       newStageName: '',
       activeStage: '',
+      newStagePoints: 10,
     }
   },
   components: {},
@@ -45,8 +44,13 @@ export default {
       this.newStageEditMode = true;
       console.log('enableNewStage');
     },
-    saveStage() {
-      this.$emit('saveNewStage', {id: uuidv4(), name: this.newStageName, questions: []});
+    saveStage(){
+      this.$emit('saveNewStage', {
+        id: uuidv4(),
+        name: this.newStageName,
+        points: parseInt(this.newStagePoints),
+        questions: []
+      });
       this.newStageName = '';
       this.newStageEditMode = false;
     },

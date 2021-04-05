@@ -1,7 +1,7 @@
 <template>
   <div class="questions-wrapper">
     <div class="question" :class="score !== -1 ? 'corrected-question': ''">
-      <h3>Q: {{question.text}}</h3>
+      <h4>Q ({{question.points}}p): <vue3-markdown-it :source='question.text' /></h4>
       <p class="answer">A: {{question.answer}}</p>
       <p class="q-score"><span></span><Input v-model="score" @change="$emit('updateQuestion', {score: score, id: question.id, text: question.text, answer: question.answer})"/></p>
     </div>
