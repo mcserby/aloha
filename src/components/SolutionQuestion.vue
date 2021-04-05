@@ -1,6 +1,6 @@
 <template>
   <div class="questions-wrapper">
-    <div class="question">
+    <div class="question" :class="score !== -1 ? 'corrected-question': ''">
       <h4>Q ({{question.points}}p): <vue3-markdown-it :source='question.text' /></h4>
       <p class="answer">A: {{question.answer}}</p>
       <p class="q-score"><span></span><Input v-model="score" @change="$emit('updateQuestion', {score: score, id: question.id, text: question.text, answer: question.answer})"/></p>
@@ -56,6 +56,22 @@ export default {
 
     h3 {
       margin: 0;
+    }
+  }
+
+  .corrected-question {
+    position: relative;
+    box-shadow: 0 0 2px #4ECCA3;
+
+    &:after {
+      content: 'Corrected';
+      position: absolute;
+      right: 1em;
+      top: 1.5em;
+      background-color: #4ECCA3;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 12px;
     }
   }
 </style>

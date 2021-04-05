@@ -4,10 +4,10 @@
 
     <div class="base-background project-creator">
       <h4>Enter a project name</h4>
-      <Input type="text" placeholder="Project Name" v-model="newProjectName" />
+      <Input :class="newProjectName ? '' : 'p-invalid'" type="text" placeholder="Project Name" v-model="newProjectName"/>
       <h4 class="topics-title">Project Topics<span> (comma separated)</span></h4>
       <Chips class="topics-input" separator="," v-model="projectTopics"/>
-      <Button class="primary-btn create-test" @click="create()"> Create </Button>
+      <Button :disabled="!newProjectName" class="primary-btn create-test" @click="create()"> Create </Button>
     </div>
   </div>
 </template>

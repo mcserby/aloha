@@ -1,8 +1,8 @@
 <template>
   <div class="stage-selector">
     Stage Selector
-    <div v-for="stage in stages" v-bind:key="stage.id" class="stage">
-      <div @click="selectStage(stage)">
+    <div :class="activeStage === stage.name ? 'active-stage': ''" @click="selectStage(stage)" v-for="stage in stages" v-bind:key="stage.id" class="stage">
+      <div>
       ({{stage.points || 0}}p) {{stage.name}}
       </div>
       <div>
@@ -33,15 +33,14 @@ export default {
     return {
       newStageEditMode: false,
       newStageName: '',
+      activeStage: '',
       newStagePoints: 10,
     }
   },
-  components: {
-  },
-  computed: {
-  },
+  components: {},
+  computed: {},
   methods: {
-    enableNewStage(){
+    enableNewStage() {
       this.newStageEditMode = true;
       console.log('enableNewStage');
     },
@@ -57,6 +56,7 @@ export default {
     },
     selectStage(stage) {
       this.$emit('selectStage', stage);
+      this.activeStage = stage.name;
     },
     deleteStage(stage) {
       this.$emit('deleteStage', stage);
@@ -67,6 +67,7 @@ export default {
 
 <style scoped lang="scss">
 .stage {
+  border: 2px solid transparent;
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
@@ -75,6 +76,17 @@ export default {
   border-radius: 15px;
   margin: .5em 0;
   padding: 15px;
+  cursor: pointer;
+  transition: .2s ease;
+
+  &:hover {
+    opacity: 0.8;
+    transition: .2s ease;
+  }
+}
+
+.active-stage {
+  border: 2px solid #4ECCA3;
 }
 
 .stage-selector {

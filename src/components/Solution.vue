@@ -37,7 +37,7 @@ export default {
       return this.$route.params.solutionId;
     },
     solution() {
-      return this.$store.state.solutions.filter(s => s.id == this.solutionId)[0];
+      return this.$store.state.solutions.filter(s => s.id === this.solutionId)[0];
     },
     questions() {
       return this.solution.questions || [];
@@ -49,7 +49,7 @@ export default {
       }));
     },
     percentageOfCompletedQuestions() {
-      if (this.questions.length == 0) {
+      if (this.questions.length === 0) {
         return 0;
       }
       const result = parseFloat(100 * this.questions.filter(q => q.score > -1).length / this.questions.length).toFixed(2);
@@ -63,7 +63,7 @@ export default {
   methods: {
     async updateQuestion(question) {
       const questionsCopy = JSON.parse(JSON.stringify(this.questions));
-      const questionIndex = questionsCopy.findIndex(q => q.id == question.id);
+      const questionIndex = questionsCopy.findIndex(q => q.id === question.id);
       if (questionIndex >= 0) {
         questionsCopy.splice(questionIndex, 1, question);
       }
@@ -74,8 +74,12 @@ export default {
       await firebaseService.saveProgress(solution);
       this.$store.commit('updateSolution', solution);
     },
-    completeEvaluation() {
-      this.$router.push({name: 'Solutions', params: {'projectId': this.solutionId}});
+    async completeEvaluation() {
+      const solution = new Object({
+        testId: this.solutionId,
+      });
+      await firebaseService.completeSolutionEvaluation(solution);
+      await this.$router.push({name: 'Solutions', params: {'projectId': this.solutionId}})
     }
   }
 }

@@ -232,11 +232,23 @@ export default {
       const db = firebase.firestore();
       await db.collection("solutions").doc(solution.testId).update({
         questions: solution.questions,
-        completed: true
+        completed: true,
+        evaluated: false
       });
     } catch(e){
       console.error(e);
     }
   },
+
+  completeSolutionEvaluation: async function(solution) {
+    try {
+      const db = firebase.firestore();
+      await db.collection("solutions").doc(solution.testId).update({
+        evaluated: true
+      })
+    } catch(e) {
+      console.error(e);
+    }
+  }
 
 }
