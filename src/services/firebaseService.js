@@ -142,7 +142,7 @@ export default {
       return {id: test.id, ...test.data()};
   },
 
-  clearTestsForProject: async function(projectId){
+  clearTestsAndSolutionsForProject: async function(projectId){
     const db = firebase.firestore();
     const tests = await db.collection("tests")
       .where("projectId", "==", projectId)
@@ -151,6 +151,14 @@ export default {
     tests.forEach(t => testIds.push(t.id));
     testIds.forEach((id) => {
       db.collection("tests").doc(id).delete();
+    });
+    const solutions = await db.collection("solutions")
+      .where("projectId", "==", projectId)
+      .get();
+    const solutionIds = [];
+    solutions.forEach(s => solutionIds.push(s.id));
+    solutionIds.forEach((id) => {
+      db.collection("solutions").doc(id).delete();
     });
   },
 
@@ -175,6 +183,17 @@ export default {
       const db = firebase.firestore();
       await db.collection("solutions").doc(solution.testId).update({
         questions: solution.questions
+      });
+    } catch(e){
+      console.error(e);
+    }
+  },
+
+  updateTestOutOfFocus: async function(outOfFocus){
+    try {
+      const db = firebase.firestore();
+      await db.collection("solutions").doc(outOfFocus.testId).update({
+        outOfFocus: firebase.firestore.FieldValue.arrayUnion({time: outOfFocus.time, timeGone: outOfFocus.timeGone})
       });
     } catch(e){
       console.error(e);
