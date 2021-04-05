@@ -136,6 +136,12 @@ export default {
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
+        console.log('expirationDate:', this.test.expirationDate);
+        const expirationDate = this.test.expirationDate || new Date().getTime();
+        if(expirationDate <= new Date().getTime()){
+          this.$router.push({name: 'EvaluationOver'});
+          return;
+        }
         const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
         console.log('this.test.testDuration', this.test.testDuration);

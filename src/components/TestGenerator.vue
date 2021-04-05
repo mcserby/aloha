@@ -5,6 +5,10 @@
       <Input class="tests-input" type="text" v-model="numberOfTests" />
     </div>
     <div>
+      <h4>Expiration date:</h4>
+      <Calendar v-model="expirationDate" showTime :minDate="currentTime()" />
+    </div>
+    <div>
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
       <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
     </div>
@@ -30,6 +34,7 @@ export default {
   data() {
     return {
       numberOfTests: 1,
+      expirationDate: new Date(),
     }
   },
   components: {
@@ -46,11 +51,16 @@ export default {
     }
   },
   methods: {
+    currentTime(){
+      return new Date();
+    },
     hasSolution(solutionId){
       return this.solutionIds.indexOf(solutionId) >= 0;
     },
     async generateTests(){
       try {
+        console.log(this.expirationDate);
+        console.log(this.expirationDate.getTime());
         const tests = [];
         for(let i = 0; i < this.numberOfTests; i++){
           tests.push(this.generateTest());
@@ -91,6 +101,7 @@ export default {
         projectId: this.project.id,
         projectName: this.project.name,
         testDuration: this.project.testDuration,
+        expirationDate: this.expirationDate.getTime(),
         questions: testQuestions,
         topics: topics,
       }
