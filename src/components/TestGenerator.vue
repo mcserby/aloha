@@ -12,6 +12,9 @@
       <div>Generated Tests:</div>
       <div v-for="testId in testIds" v-bind:key="testId">
           <router-link class="generated-link" :to="{ name: 'Test', params: { testId: testId }}">Test: {{testId}}</router-link>
+          <router-link class="solution-link" v-if="hasSolution(testId)" :to="{ name: 'Solution', params: { solutionId: testId }}">
+            <i class="pi pi-arrow-right"></i> Solution
+          </router-link>
       </div>
     </div>
   </div>
@@ -37,9 +40,15 @@ export default {
   computed: {
     testIds(){
       return this.$store.state.testIds;
+    },
+    solutionIds(){
+      return this.$store.state.solutions.map(s => s.id);
     }
   },
   methods: {
+    hasSolution(solutionId){
+      return this.solutionIds.indexOf(solutionId) >= 0;
+    },
     async generateTests(){
       try {
         const tests = [];
@@ -111,6 +120,17 @@ export default {
   }
 
   .generated-link {
+    color: #4ECCA3;
+    transition: .2s ease;
+
+    &:hover {
+      color: #00C2FF;
+      transition: .2s ease;
+    }
+  }
+
+  .solution-link {
+    margin-left: 5em;
     color: #4ECCA3;
     transition: .2s ease;
 

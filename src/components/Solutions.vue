@@ -34,7 +34,6 @@ export default {
       return this.$route.params.projectId;
     },
     solutions() {
-      console.log(this.$store.state.solutions);
       return this.$store.state.solutions;
     }
   },
