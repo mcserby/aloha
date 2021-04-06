@@ -6,6 +6,7 @@ import Test from "@/components/Test.vue";
 import ThankYou from "@/components/ThankYou.vue";
 import Solutions from "@/components/Solutions.vue";
 import Solution from "@/components/Solution.vue";
+import EvaluationOver from "@/components/EvaluationOver.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: "/thankyou/:firstName",
     name: "ThankYou",
     component: ThankYou,
+  },
+  {
+    path: "/evaluationover",
+    name: "EvaluationOver",
+    component: EvaluationOver,
   },
 ];
 

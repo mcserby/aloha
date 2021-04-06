@@ -30,7 +30,6 @@ export default {
     },
     onAuthStateChange(user){
         if (user) {
-          console.log(user.email);
           this.$store.commit('loginUser', user);
           this.loadProjects();
         } else {

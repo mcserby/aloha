@@ -5,6 +5,10 @@
       <Input class="tests-input" type="text" v-model="numberOfTests" />
     </div>
     <div>
+      <h4>Expiration date:</h4>
+      <Calendar v-model="expirationDate" showTime :minDate="currentTime()" />
+    </div>
+    <div>
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
       <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
     </div>
@@ -12,6 +16,9 @@
       <div>Generated Tests:</div>
       <div v-for="testId in testIds" v-bind:key="testId">
           <router-link class="generated-link" :to="{ name: 'Test', params: { testId: testId }}">Test: {{testId}}</router-link>
+          <router-link class="solution-link" v-if="hasSolution(testId)" :to="{ name: 'Solution', params: { solutionId: testId }}">
+            <i class="pi pi-arrow-right"></i> Solution
+          </router-link>
       </div>
     </div>
   </div>
@@ -27,6 +34,7 @@ export default {
   data() {
     return {
       numberOfTests: 1,
+      expirationDate: new Date(new Date().getTime() + 48*60*60000)
     }
   },
   components: {
@@ -37,9 +45,18 @@ export default {
   computed: {
     testIds(){
       return this.$store.state.testIds;
+    },
+    solutionIds(){
+      return this.$store.state.solutions.map(s => s.id);
     }
   },
   methods: {
+    currentTime(){
+      return new Date();
+    },
+    hasSolution(solutionId){
+      return this.solutionIds.indexOf(solutionId) >= 0;
+    },
     async generateTests(){
       try {
         const tests = [];
@@ -82,6 +99,7 @@ export default {
         projectId: this.project.id,
         projectName: this.project.name,
         testDuration: this.project.testDuration,
+        expirationDate: this.expirationDate.getTime(),
         questions: testQuestions,
         topics: topics,
       }
@@ -111,6 +129,17 @@ export default {
   }
 
   .generated-link {
+    color: #4ECCA3;
+    transition: .2s ease;
+
+    &:hover {
+      color: #00C2FF;
+      transition: .2s ease;
+    }
+  }
+
+  .solution-link {
+    margin-left: 5em;
     color: #4ECCA3;
     transition: .2s ease;
 

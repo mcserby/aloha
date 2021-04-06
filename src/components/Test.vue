@@ -12,7 +12,11 @@
           <Input type="text" v-model="secondName"/>
         </div>
         <div class="form-group">
-          <Button :disabled="testStarted" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
+          <label>Email</label>
+          <Input type="text" v-model="email"/>
+        </div>
+        <div class="form-group">
+          <Button :disabled="startTestDisabled" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
         </div>
       </div>
       <div class="radio-preferences">
@@ -48,6 +52,7 @@ export default {
       test: {},
       firstName: '',
       secondName: '',
+      email: '',
       initialTotalTime: 600,
       totalTimeInSeconds: 600,
       timerInterval: null,
@@ -72,15 +77,16 @@ export default {
     RadioPreference
   },
   computed: {
-    nameFilled() {
-      return this.firstName && this.secondName;
+    startTestDisabled(){
+      return this.testStarted || !this.mandatoryDataFilled;
+    },
+    mandatoryDataFilled() {
+      return this.firstName && this.secondName && this.email;
     },
     testIsEditable() {
-      console.log('testIsEditable', !this.testCompleted || this.testStarted);
       return this.testStarted && !this.testCompleted;
     },
     testStarted() {
-      console.log('testStarted: ', this.startTime || false);
       return this.startTime || false;
     },
     testId() {
@@ -128,14 +134,16 @@ export default {
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
+        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate)){
+          this.$router.push({name: 'EvaluationOver'});
+          return;
+        }
         const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
-        console.log('this.test.testDuration', this.test.testDuration);
         this.initialTotalTime = this.test.testDuration * 60;
         this.totalTimeInSeconds = this.initialTotalTime;
         this.topics = this.test.topics;
         if (solution) {
-          console.log('solution', solution);
           this.testCompleted = solution.completed || false;
           this.firstName = solution.firstName;
           if (this.testCompleted) {
@@ -143,6 +151,7 @@ export default {
             return;
           }
           this.secondName = solution.secondName;
+          this.email = solution.email;
           this.startTime = solution.startTime;
           if (solution.questions) {
             this.questions = solution.questions;
@@ -154,6 +163,9 @@ export default {
         console.error(e);
       }
     },
+    expirationDateMissingOrIsExpired(expirationDate){
+      return !expirationDate || expirationDate <= new Date().getTime();
+    },
     async startTest() {
       this.startTime = new Date().getTime();
       const startTest = new Object({
@@ -161,7 +173,8 @@ export default {
         startTime: this.startTime,
         projectId: this.test.projectId,
         firstName: this.firstName,
-        secondName: this.secondName
+        secondName: this.secondName,
+        email: this.email
       });
       await firebaseService.startTest(startTest);
       this.triggerCountdownTimer();

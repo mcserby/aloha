@@ -11,6 +11,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import RadioButton from 'primevue/radiobutton';
 import Chips from 'primevue/chips';
+import Calendar from 'primevue/calendar';
 import { Field, Form } from 'vee-validate';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
@@ -36,3 +37,4 @@ app.component('Radio', RadioButton);
 app.component('Chips', Chips)
 app.component('Form', Form);
 app.component('Field', Field);
+app.component('Calendar', Calendar);
