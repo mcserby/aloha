@@ -74,7 +74,7 @@ export default {
       }
     },
     createTestUrlsBlob(){
-      const urls = this.testIds.map(testId => "https://accesa-internship-portal.web.app/test" + testId).join("\n");
+      const urls = this.testIds.map(testId => "https://accesa-internship-portal.web.app/test/" + testId).join("\n");
       const blob = new Blob([urls], {type: 'text/csv'});
       this.blobUrl = URL.createObjectURL(blob);
     },
