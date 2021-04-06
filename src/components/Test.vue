@@ -134,8 +134,7 @@ export default {
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
-        const expirationDate = this.test.expirationDate || new Date().getTime();
-        if(expirationDate <= new Date().getTime()){
+        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate)){
           this.$router.push({name: 'EvaluationOver'});
           return;
         }
@@ -163,6 +162,9 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    expirationDateMissingOrIsExpired(expirationDate){
+      return !expirationDate || expirationDate <= new Date().getTime();
     },
     async startTest() {
       this.startTime = new Date().getTime();
