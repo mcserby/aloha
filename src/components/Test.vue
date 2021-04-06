@@ -134,7 +134,6 @@ export default {
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
-        console.log('expirationDate:', this.test.expirationDate);
         const expirationDate = this.test.expirationDate || new Date().getTime();
         if(expirationDate <= new Date().getTime()){
           this.$router.push({name: 'EvaluationOver'});
@@ -142,12 +141,10 @@ export default {
         }
         const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
-        console.log('this.test.testDuration', this.test.testDuration);
         this.initialTotalTime = this.test.testDuration * 60;
         this.totalTimeInSeconds = this.initialTotalTime;
         this.topics = this.test.topics;
         if (solution) {
-          console.log('solution', solution);
           this.testCompleted = solution.completed || false;
           this.firstName = solution.firstName;
           if (this.testCompleted) {
