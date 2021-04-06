@@ -3,7 +3,7 @@
     <div class="question" :class="score !== -1 ? 'corrected-question': ''">
       <h4>Q ({{question.points}}p): <vue3-markdown-it :source='question.text' /></h4>
       <p class="answer">A: {{question.answer}}</p>
-      <p class="q-score"><span></span><Input v-model="score" @change="$emit('updateQuestion', {score: score, id: question.id, text: question.text, answer: question.answer})"/></p>
+      <p class="q-score"><span></span><Input v-model="score" @change="updateQuestion()"/></p>
     </div>
   </div>
 </template>
@@ -12,20 +12,36 @@
 
 export default {
   name: 'SolutionQuestion',
-  props: ['question'],
+  props: ['question', 'initialScore'],
   data() {
     return {
       score: -1
     }
   },
   mounted(){
-    this.score = this.question.score;
+    this.score = this.initialScore;
+  },
+  watch: {
+    initialScore(newval) {
+      this.score = newval;
+    }
   },
   components: {
   },
   computed: {
   },
   methods: {
+    updateQuestion(){
+      if(this.score > this.question.points){
+        this.score = this.question.points;
+      }
+      if(this.score < -1){
+        this.score = -1;
+      }
+      const question = JSON.parse(JSON.stringify(this.question));
+      question.score = parseInt(this.score);
+      this.$emit('updateQuestion', question);
+    }
   }
 }
 </script>
