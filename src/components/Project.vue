@@ -149,7 +149,6 @@ export default {
       this.$store.commit('deleteProject', projId);
     },
     selectStage(stage) {
-      console.log('selectStage', stage);
       this.$store.commit('selectStage', stage.id);
     },
     async saveNewStage(stage) {

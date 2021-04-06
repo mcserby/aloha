@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       numberOfTests: 1,
-      expirationDate: new Date(),
+      expirationDate: new Date(new Date().getTime() + 48*60*60000)
     }
   },
   components: {
@@ -59,8 +59,6 @@ export default {
     },
     async generateTests(){
       try {
-        console.log(this.expirationDate);
-        console.log(this.expirationDate.getTime());
         const tests = [];
         for(let i = 0; i < this.numberOfTests; i++){
           tests.push(this.generateTest());

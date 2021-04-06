@@ -33,7 +33,6 @@ export default {
   methods: {
     async create(){
       const project = await firebaseService.addProject(this.newProjectName, this.projectTopics);
-      console.log('project', project);
       this.$store.commit('addProject', project);
       this.$router.push({name: 'Project', params: {'projectId': project.id}})
     }

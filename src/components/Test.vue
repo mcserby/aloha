@@ -84,11 +84,9 @@ export default {
       return this.firstName && this.secondName && this.email;
     },
     testIsEditable() {
-      console.log('testIsEditable', !this.testCompleted || this.testStarted);
       return this.testStarted && !this.testCompleted;
     },
     testStarted() {
-      console.log('testStarted: ', this.startTime || false);
       return this.startTime || false;
     },
     testId() {

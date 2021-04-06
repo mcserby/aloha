@@ -25,7 +25,6 @@ export default {
     var credential = result.credential;
     var token = credential.accessToken;
     var user = result.user;
-    console.log(JSON.stringify(user));
     return {token: token, user: user};
   },
 
