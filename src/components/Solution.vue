@@ -7,7 +7,7 @@
       minute: {{interval.timeSinceStart}}, duration: {{interval.duration}} seconds
     </div>
     <div class="solution-questions" v-for="question in questions" v-bind:key="question.id">
-      <SolutionQuestion :question="question" @update-question="updateQuestion"/>
+      <SolutionQuestion :question="question" :initialScore="question.score" @update-question="updateQuestion"/>
     </div>
     <p class="q-percentage">{{ percentageOfCompletedQuestions }}% of questions completed</p>
     <Button class="rnd-btn complete-eval" :disabled="percentageOfCompletedQuestions !== 100"
@@ -62,7 +62,8 @@ export default {
   },
   methods: {
     async updateQuestion(question) {
-      const questionsCopy = JSON.parse(JSON.stringify(this.questions));
+      const mostRecentSolution = await firebaseService.loadSolution(this.solutionId);
+      const questionsCopy = JSON.parse(JSON.stringify(mostRecentSolution.questions));
       const questionIndex = questionsCopy.findIndex(q => q.id === question.id);
       if (questionIndex >= 0) {
         questionsCopy.splice(questionIndex, 1, question);
@@ -79,7 +80,7 @@ export default {
         testId: this.solutionId,
       });
       await firebaseService.completeSolutionEvaluation(solution);
-      await this.$router.push({name: 'Solutions', params: {'projectId': this.solutionId}})
+      await this.$router.push({name: 'Solutions', params: {'projectId': this.solutionId}});
     }
   }
 }

@@ -11,6 +11,7 @@
     <div>
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
       <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
+      <a :href="blobUrl" text="download tests" download>download tests</a>
     </div>
     <div class="generated-tests">
       <div>Generated Tests:</div>
@@ -34,13 +35,15 @@ export default {
   data() {
     return {
       numberOfTests: 1,
-      expirationDate: new Date(new Date().getTime() + 48*60*60000)
+      expirationDate: new Date(new Date().getTime() + 48*60*60000),
+      blobUrl: null,
     }
   },
   components: {
   },
   mounted(){
     this.loadProjectTestIds();
+    this.createTestUrlsBlob();
   },
   computed: {
     testIds(){
@@ -65,9 +68,15 @@ export default {
         }
         await firebaseService.storeTests(tests);
         await this.loadProjectTestIds();
+        this.createTestUrlsBlob();
       }catch(e){
         console.error(e);
       }
+    },
+    createTestUrlsBlob(){
+      const urls = this.testIds.map(testId => "https://accesa-internship-portal.web.app/test/" + testId).join("\n");
+      const blob = new Blob([urls], {type: 'text/csv'});
+      this.blobUrl = URL.createObjectURL(blob);
     },
     async loadProjectTestIds(){
       const testIds = await firebaseService.loadTestIds(this.project.id);
