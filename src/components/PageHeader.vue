@@ -25,7 +25,7 @@ export default {
       if (this.isTestRoute) {
           this.$confirm.require({
             target: document.getElementById('timer-popup'),
-            message: `➡ Save your progress by using CTRL+S ➡ The test is submitted automatically if your time is up`,
+            message: `➡ Save your progress by using CTRL+S \n➡ The test is submitted automatically if your time is up \n➡ You can start your test after you fill in your name and your email ➡ Make sure to choose your favourite technologies`,
             rejectClass: 'disabled-reject',
             acceptLabel: 'Got It',
             acceptClass: 'primary-btn'

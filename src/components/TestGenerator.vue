@@ -5,6 +5,10 @@
       <Input class="tests-input" type="text" v-model="numberOfTests" />
     </div>
     <div>
+      <h4>Kickoff date:</h4>
+      <Calendar v-model="kickOffDate" showTime :minDate="currentTime()" />
+    </div>
+    <div>
       <h4>Expiration date:</h4>
       <Calendar v-model="expirationDate" showTime :minDate="currentTime()" />
     </div>
@@ -36,6 +40,7 @@ export default {
     return {
       numberOfTests: 1,
       expirationDate: new Date(new Date().getTime() + 48*60*60000),
+      kickOffDate: new Date(),
       blobUrl: null,
     }
   },
@@ -109,6 +114,7 @@ export default {
         projectName: this.project.name,
         testDuration: this.project.testDuration,
         expirationDate: this.expirationDate.getTime(),
+        kickOffDate: this.kickOffDate.getTime(),
         questions: testQuestions,
         topics: topics,
       }

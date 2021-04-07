@@ -154,6 +154,10 @@ export default {
     async loadTest(testId) {
       try {
         this.test = await firebaseService.loadTest(testId);
+        this.kickOffDate = this.test.kickOffDate || new Date().getTime() - 1000;
+        if(this.kickOffDate > new Date().getTime()){
+          this.$router.push({name: 'BeforeKickOffDate',  params: {'kickOffDate': this.kickOffDate}});
+        }
         if(this.expirationDateMissingOrIsExpired(this.test.expirationDate)){
           this.$router.push({name: 'EvaluationOver'});
           return;
@@ -278,7 +282,7 @@ export default {
       if (this.isTestRoute) {
         this.$confirm.require({
           target: document.getElementById('hint-display'),
-          message: `➡ Save your progress by using CTRL+S ➡ The test is submitted automatically if your time is up`,
+          message: `➡ Save your progress by using CTRL+S \n➡ The test is submitted automatically if your time is up ➡ You can start your test after you fill in your name and your email ➡ Make sure to choose your favourite technologies`,
           acceptLabel: 'Got It',
           rejectClass: 'disabled-reject',
           acceptClass: 'primary-btn'

@@ -32,7 +32,7 @@ export default {
       return this.$store.state.userName;
     },
     isTestRoute() {
-      return this.$route.name === 'Test';
+      return this.$route.name === 'Test' || this.$route.name === 'BeforeKickOffDate' || this.$route.name === 'ThankYou';
     }
   },
   methods: {
