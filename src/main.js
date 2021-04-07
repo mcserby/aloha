@@ -10,6 +10,7 @@ import Dialog from 'primevue/dialog';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import RadioButton from 'primevue/radiobutton';
+import Checkbox from 'primevue/checkbox';
 import Chips from 'primevue/chips';
 import Calendar from 'primevue/calendar';
 import { Field, Form } from 'vee-validate';
@@ -34,7 +35,8 @@ app.component('Dialog', Dialog);
 app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Radio', RadioButton);
-app.component('Chips', Chips)
+app.component('Chips', Chips);
+app.component('Checkbox', Checkbox);
 app.component('Form', Form);
 app.component('Field', Field);
 app.component('Calendar', Calendar);
