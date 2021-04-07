@@ -3,13 +3,13 @@
     <div class="sidemenu-logo">
       <img class="logo" src="../assets/accesaig.svg" alt="logo" />
     </div>
-    <div class="sidemenu-items">
-      <div class="tools">
+    <div class="sidemenu-items" :class="isTestRoute ? 'sidemenu-test' : ''">
+      <div class="tools" v-if="!isTestRoute">
         <p class="mini-title">Tools</p>
         <p v-if="isLoggedIn" class="nav-item"><i class="pi pi-th-large"></i>Internships</p>
         <p v-if="isLoggedIn" class="nav-item" @click=" $router.push({name: 'Main'})"><i class="pi pi-book"></i>Evaluations</p>
       </div>
-      <div class="user-details">
+      <div class="user-details" v-if="!isTestRoute">
         <p class="mini-title">Other</p>
         <p class="nav-item username">{{userName}}</p>
         <p v-if="isLoggedIn" @click="logout()" class="nav-item other-item"><i class="pi pi-sign-out"></i>Log Out</p>
@@ -31,6 +31,9 @@ export default {
     userName() {
       return this.$store.state.userName;
     },
+    isTestRoute() {
+      return this.$route.name === 'Test';
+    }
   },
   methods: {
     async login() {
@@ -67,9 +70,11 @@ export default {
       width: 150px;
       position: relative;
       bottom: 10px;
+      left: 10px;
       height: auto;
     }
   }
+
 
   .sidemenu-items {
     display: flex;
@@ -80,7 +85,7 @@ export default {
     padding-top: 2em;
     width: 100%;
     height: calc(100% - 200px);
-    background-color: #232931;
+    background: #232931;
     border-radius: 50px 50px 0 0;
 
     .mini-title {
@@ -89,6 +94,7 @@ export default {
       font-weight: 600;
       font-size: 12px;
     }
+
 
     .user-details {
       width: 100%;
@@ -133,5 +139,9 @@ export default {
         }
     }
   }
+}
+
+.sidemenu-test {
+  background: linear-gradient(to bottom, #232931, transparent) !important;
 }
 </style>
