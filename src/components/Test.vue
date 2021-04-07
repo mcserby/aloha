@@ -1,6 +1,23 @@
 <template>
+  <PopUp></PopUp>
+  <Toast></Toast>
+  <Dialog :style="{width: '600px'}"
+          :dismissableMask="false"
+          :modal="true"
+          v-model:visible="privacyModalVisible"
+          :closable="false"
+          :closeOnEscape="false"
+          header="Privacy Policy">
+    <p>Text goes here</p>
+    <template #footer>
+      <Button label="Okay" icon="pi pi-check-circle" @click="hidePrivacyModal" class="p-button-text"/>
+    </template>
+  </Dialog>
   <div class="base-container">
-    <PageHeader :title="'Test ' + testId" :remaining-time="remainingTime"></PageHeader>
+    <div class="header-container">
+      <PageHeader :title="'Test ' + testId" :remaining-time="remainingTime"></PageHeader>
+      <p id="hint-display">.</p>
+    </div>
     <div class="test-header-container">
       <div class="name-inputs">
         <div class="form-group">
@@ -14,9 +31,6 @@
         <div class="form-group">
           <label>Email</label>
           <Input type="text" v-model="email"/>
-        </div>
-        <div class="form-group">
-          <Button :disabled="startTestDisabled" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
         </div>
       </div>
       <div class="radio-preferences">
@@ -34,7 +48,8 @@
         <TestQuestion :question="question" :isEditable="testIsEditable" @update:answer="question.answer = $event"/>
       </div>
     </div>
-    <Button class="rnd-btn submit-test" :disabled="!testStarted" @click="submitSolution()">Submit Solution</Button>
+    <Button v-if="!startTestDisabled" :disabled="startTestDisabled" @click="startTest()" class="primary-btn rnd-btn start-test" label="Start Test"></Button>
+    <Button class="rnd-btn primary-btn submit-test" v-if="testStarted" @click="submitSolution()">Submit Solution</Button>
   </div>
 </template>
 
@@ -61,11 +76,13 @@ export default {
       questions: [],
       topics: [],
       leaveTime: null,
+      privacyModalVisible: false
     }
   },
   mounted() {
     this.loadTest(this.testId);
     this.attachCtrlSave();
+    this.displayPrivacyModal();
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this._keyListener);
@@ -113,6 +130,9 @@ export default {
         useGrouping: false
       });
     },
+    isTestRoute() {
+      return this.$route.name === 'Test';
+    }
   },
   methods: {
     attachCtrlSave() {
@@ -211,6 +231,7 @@ export default {
         console.log('saving progress...');
         const solution = this.constructSolution();
         await firebaseService.saveProgress(solution);
+        this.$toast.add({severity:'success', summary: 'Success', detail:'Progress Saved', life: 1000})
       }
     },
     async submitSolution() {
@@ -243,25 +264,46 @@ export default {
     stopMonitorOutOfFocusEvent(){
       window.removeEventListener('blur', this._blurHandler);
       window.removeEventListener('focus', this.focusHandler);
-    }
+    },
+    displayPrivacyModal() {
+      this.privacyModalVisible = true;
+    },
+    hidePrivacyModal() {
+      setTimeout(() => {
+        this.displayHints();
+      }, 1000);
+      this.privacyModalVisible = false;
+    },
+    displayHints() {
+      if (this.isTestRoute) {
+        this.$confirm.require({
+          target: document.getElementById('hint-display'),
+          message: `➡ Save your progress by using CTRL+S ➡ The test is submitted automatically if your time is up`,
+          acceptLabel: 'Got It',
+          rejectClass: 'disabled-reject',
+          acceptClass: 'primary-btn'
+        })
+      }
+    },
   }
 }
 </script>
 
 <style scoped lang="scss">
   .name-inputs {
+    background-color: #232931;
+    padding: 1em;
+    border-radius: 15px;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.15);
 
     .form-group {
       display: flex;
       flex-direction: column;
       margin-right: 2em;
 
-      .start-test {
-        margin-top: .5em;
-      }
     }
   }
 
@@ -278,11 +320,40 @@ export default {
   }
 
   .radio-preferences {
+    margin: 2em 0;
     width: 100%;
+    background-color: #232931;
+    padding: 1em;
+    border-radius: 15px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.15);
   }
 
   .test-header-container {
     width: 100%;
+  }
+
+  .start-test {
+    width: 200px;
+    height: 50px;
+    transition: .2s ease;
+
+    &:hover {
+      width: 220px;
+      transition: .2s ease;
+    }
+  }
+
+  .header-container {
+    position: relative;
+    width: 100%;
+
+    #hint-display {
+      color: red;
+      position: absolute;
+      right: 1.5em;
+      opacity: 0;
+      top: 43%;
+    }
   }
 
   .preference-cards {
@@ -293,6 +364,7 @@ export default {
   }
 
   .preferences-title {
+    margin-top: 0;
     margin-bottom: 0;
   }
   .faded-description {

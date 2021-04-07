@@ -57,7 +57,7 @@ export default {
     margin-right: 2px;
   }
   .radio-card {
-    background: #232931;
+    background: #3A3F46;
     width: fit-content;
     padding: 1em;
     border-radius: 15px;

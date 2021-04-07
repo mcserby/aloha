@@ -62,4 +62,8 @@ export default {
       color: #4ECCA3;
     }
   }
+
+  .answer-area {
+    margin-top: 1em;
+  }
 </style>

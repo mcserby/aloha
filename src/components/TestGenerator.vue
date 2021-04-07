@@ -8,10 +8,10 @@
       <h4>Expiration date:</h4>
       <Calendar v-model="expirationDate" showTime :minDate="currentTime()" />
     </div>
-    <div>
+    <div class="generator-actions">
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
       <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
-      <a :href="blobUrl" text="download tests" download>download tests</a>
+      <a class="texts-download" :href="blobUrl" text="Download Tests" download>Download Tests</a>
     </div>
     <div class="generated-tests">
       <div>Generated Tests:</div>
@@ -126,10 +126,20 @@ export default {
     overflow-y: auto;
   }
 
+  .generator-actions {
+    margin: 1em 0;
+    display: flex;
+    align-items: center;
+  }
+
   .test-generator-button {
     margin-right: 1em;
-    margin-bottom: 1em;
     border-radius: 15px;
+  }
+
+  .texts-download {
+    color: #fff;
+    text-decoration: #4ECCA3 underline;
   }
 
   .tests-input {
