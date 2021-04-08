@@ -14,7 +14,9 @@
     <p>This privacy notice informs you about the information we collect, store and process when you use this website to take a knowledge test for our internship program. In collecting, storing and processing this information, we are acting as a data controller and, by law, we are required to provide you with information about us, about why and how we use your data, and about the rights you have over your data.</p>
     <h3 class="privacy-subsection">Who are we?</h3>
     <p>Accesa IT Systems SRL (Str. Constanta nr. 12, Cluj Napoca)
-      Accesa IT Consulting SRL (str. Constanta nr. 12, Cluj Napoca)
+      <br>
+      Accesa IT Consulting SRL (Str. Constanta nr. 12, Cluj Napoca)
+      <br>
       Ratiodata Accesa Romania SRL (Str. Constanta nr. 12, Cluj Napoca)
     </p>
     <h3 class="privacy-subsection">What personal data do we collect?</h3>
