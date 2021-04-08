@@ -2,18 +2,52 @@
   <PopUp></PopUp>
   <Toast></Toast>
   <ContextMenu :global="false" ref="menu"/>
+
   <Dialog :style="{width: '600px'}"
           :dismissableMask="false"
           :modal="true"
           v-model:visible="privacyModalVisible"
           :closable="false"
           :closeOnEscape="false"
-          header="Privacy Policy">
-    <p>Text goes here</p>
+          header="Privacy Notice">
+    <p>This privacy notice informs you about the information we collect, store and process when you use this website to take a knowledge test for our internship program. In collecting, storing and processing this information, we are acting as a data controller and, by law, we are required to provide you with information about us, about why and how we use your data, and about the rights you have over your data.</p>
+    <h3 class="privacy-subsection">Who are we?</h3>
+    <p>Accesa IT Systems SRL (Str. Constanta nr. 12, Cluj Napoca)
+      Accesa IT Consulting SRL (str. Constanta nr. 12, Cluj Napoca)
+      Ratiodata Accesa Romania SRL (Str. Constanta nr. 12, Cluj Napoca)
+    </p>
+    <h3 class="privacy-subsection">What personal data do we collect?</h3>
+    <p>As part of the test you are about to undertake, we will collect, store and process the following information:
+      <br>
+      -	Name and surname;
+      <br>
+      -	Your answers to the questions in the test.
+      <br>
+      This website does not use, store or collect any cookies.
+    </p>
+    <h3 class="privacy-subsection">Why do we collect this information?</h3>
+    <p>We collect and process this information to assess your technical knowledge, as a mandatory step of the selection process for the internship program to which you have applied. </p>
+    <h3 class="privacy-subsection">What are the legal bases for collecting this information?</h3>
+    <p>The collection and processing of your data in relation to the purpose is based on our legitimate interest in selecting the best candidates for the internship program. This does not override your interests or your fundamental rights and freedoms.</p>
+    <h3 class="privacy-subsection">What do we do with your information?</h3>
+    <p>Your information is stored in our internal database. We will not share this information with any third parties, and we will not use the information to make any automated decisions that might affect you.</p>
+    <h3 class="privacy-subsection">How long do we keep your information for?</h3>
+    <p>We will keep your information until all open internship positions are fulfilled, but no longer than the 19th of July 2021. After this term, all the data collected through this website will be deleted.</p>
+    <h3 class="privacy-subsection">Your rights over your information</h3>
+    <p>By law, you can ask us what information we hold about you, and you can ask us to correct it if it is inaccurate. You can also ask for it to be erased, under certain conditions, and you can ask for us to give you a copy of the information. You can also ask us to stop using your information under certain conditions.</p>
+    <h3 class="privacy-subsection">Your right to complain</h3>
+    <p>If you have a complaint about our use of your information, you should:
+      <br>
+      -	Firstly, contact our DPO at dpo@accesa.eu, +40 364 115 115
+      <br>
+      -	Secondly, if you are not satisfied with the answer provided or if we haven’t answered your request in due time (30 days), contact Agentia Nationala pentru Supravegherea Datelor cu Caracter Personal at http://www.dataprotection.ro/?page=Plangeri_RGPD&lang=ro or write to them at anspdcp@dataprotection.ro.
+    </p>
+
     <template #footer>
-      <Button label="Okay" icon="pi pi-check-circle" @click="hidePrivacyModal" class="p-button-text"/>
+      <Button label="I have read and understood the terms of the privacy notice" icon="pi pi-check-circle" @click="hidePrivacyModal" class="primary-btn rnd-btn privacy-btn"/>
     </template>
   </Dialog>
+
   <div class="base-container test-container" @contextmenu="handleContextMenu" oncopy="return false" onpaste="return false">
     <div class="header-container">
       <PageHeader :title="'Test'" :remaining-time="remainingTime"></PageHeader>
@@ -316,6 +350,10 @@ export default {
     }
   }
 
+  .privacy-btn {
+    margin-top: 1em;
+  }
+
   .submit-test {
     margin-top: 2em;
   }
@@ -377,6 +415,12 @@ export default {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     grid-gap: 3em;
+  }
+
+  .privacy-subsection {
+    text-align: center;
+    margin: 1em 0;
+    color: #00C2FF;
   }
 
   .preferences-title {
