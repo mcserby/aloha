@@ -4,23 +4,23 @@
     <div class="options">
       <div class="radio-group">
         <label>1</label>
-        <Radio v-on:focus="changePreference()" class="radio" name="preferenceValue" value="1" v-model="preferenceValue" />
+        <Radio :disabled="disableEditing" v-on:focus="changePreference()" class="radio" name="preferenceValue" value="1" v-model="preferenceValue" />
       </div>
       <div class="radio-group">
         <label>2</label>
-        <Radio v-on:focus="changePreference()" class="radio" name="preferenceValue" value="2" v-model="preferenceValue" />
+        <Radio :disabled="disableEditing" v-on:focus="changePreference()" class="radio" name="preferenceValue" value="2" v-model="preferenceValue" />
       </div>
       <div class="radio-group">
         <label>3</label>
-        <Radio v-on:focus="changePreference()" class="radio" name="preferenceValue" value="3" v-model="preferenceValue" />
+        <Radio :disabled="disableEditing" v-on:focus="changePreference()" class="radio" name="preferenceValue" value="3" v-model="preferenceValue" />
       </div>
       <div class="radio-group">
         <label>4</label>
-        <Radio v-on:focus="changePreference()" class="radio" name="preferenceValue" value="4" v-model="preferenceValue" />
+        <Radio :disabled="disableEditing" v-on:focus="changePreference()" class="radio" name="preferenceValue" value="4" v-model="preferenceValue" />
       </div>
       <div class="radio-group">
         <label>5</label>
-        <Radio v-on:focus="changePreference()" class="radio" name="preferenceValue" value="5" v-model="preferenceValue" />
+        <Radio :disabled="disableEditing" v-on:focus="changePreference()" class="radio" name="preferenceValue" value="5" v-model="preferenceValue" />
       </div>
     </div>
   </div>
@@ -31,7 +31,8 @@ export default {
   name: 'RadioPreference',
   props: {
     forTechnology: String,
-    value: Number
+    value: Number,
+    disableEditing: Boolean,
   },
   data() {
     return {

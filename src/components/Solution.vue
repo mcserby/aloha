@@ -1,10 +1,19 @@
 <template>
   <div class="base-container">
     <PageHeader :title="'Applicant: ' + solution.firstName + ' ' + solution.secondName">
-      Aplicant: {{ solution.firstName }} {{ solution.secondName }}
+      Aplicant: {{ solution.firstName }} {{ solution.secondName }} {{solution.email}}
     </PageHeader>
     <div v-for="interval in outOfTestIntervals" v-bind:key="interval.timeSinceStart">
       minute: {{interval.timeSinceStart}}, duration: {{interval.duration}} seconds
+    </div>
+    <div class="radio-preferences">
+      <h2 class="preferences-title">Technology Preferences</h2>
+      <p class="faded-description">
+        1: Least Preferable <i class="pi pi-minus"></i> 5: Most Preferable
+      </p>
+      <div class="preference-cards">
+        <RadioPreference v-for="topic in topics" v-bind:key="topic.technology" :value="topic.value" :for-technology="topic.technology" :disableEditing="true"/>
+      </div>
     </div>
     <div class="solution-questions" v-for="question in questions" v-bind:key="question.id">
       <SolutionQuestion :question="question" :initialScore="question.score" @update-question="updateQuestion"/>
@@ -22,6 +31,7 @@
 import firebaseService from '../services/firebaseService';
 import SolutionQuestion from './SolutionQuestion';
 import PageHeader from "@/components/PageHeader";
+import RadioPreference from "@/components/RadioPreference";
 
 export default {
   name: 'Solution',
@@ -30,7 +40,8 @@ export default {
   },
   components: {
     PageHeader,
-    SolutionQuestion
+    SolutionQuestion,
+    RadioPreference
   },
   computed: {
     solutionId() {
@@ -38,6 +49,9 @@ export default {
     },
     solution() {
       return this.$store.state.solutions.filter(s => s.id === this.solutionId)[0];
+    },
+    topics(){
+      return this.solution.topics || [];
     },
     questions() {
       return this.solution.questions || [];
