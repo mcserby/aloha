@@ -21,6 +21,8 @@
       <br>
       -	Name and surname;
       <br>
+      - Your email address;
+      <br>
       -	Your answers to the questions in the test.
       <br>
       This website does not use, store or collect any cookies.
