@@ -39,7 +39,7 @@
           1: Least Preferable <i class="pi pi-minus"></i> 5: Most Preferable
         </p>
         <div class="preference-cards">
-          <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :value="topic.value" :for-technology="topic.technology"/>
+          <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :value="topic.value" :for-technology="topic.technology" :disableEditing="false"/>
         </div>
       </div>
     </div>
@@ -192,15 +192,16 @@ export default {
     },
     async startTest() {
       this.startTime = new Date().getTime();
-      const startTest = new Object({
+      const solution = new Object({
         testId: this.test.id,
         startTime: this.startTime,
         projectId: this.test.projectId,
         firstName: this.firstName,
         secondName: this.secondName,
-        email: this.email
+        email: this.email,
+        topics: this.test.topics
       });
-      await firebaseService.startTest(startTest);
+      await firebaseService.startTest(solution);
       this.triggerCountdownTimer();
       this.startMonitorOutOfFocusEvent();// TODO: start monitor out of focus intervals
     },
