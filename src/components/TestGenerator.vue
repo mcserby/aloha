@@ -14,7 +14,7 @@
     </div>
     <div class="generator-actions">
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
-      <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
+      <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject($event)">Clear all tests and solutions</Button>
       <a class="texts-download" :href="blobUrl" text="Download Tests" download>Download Tests</a>
     </div>
     <div class="generated-tests">
@@ -87,10 +87,20 @@ export default {
       const testIds = await firebaseService.loadTestIds(this.project.id);
       this.$store.commit('updateTestIds', testIds);
     },
-    async clearTestsAndSolutionsForProject(){
-      await firebaseService.clearTestsAndSolutionsForProject(this.project.id);
-      this.$store.commit('updateTestIds', []);
-      this.$store.commit('updateSolutions', []);
+    async clearTestsAndSolutionsForProject(event){
+      await this.$confirm.require({
+        target: event.currentTarget,
+        message: 'WARNING! This will delete all the tests and solutions, are you sure you want to continue?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Delete',
+        acceptClass: 'confirm-delete',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          firebaseService.clearTestsAndSolutionsForProject(this.project.id);
+          this.$store.commit('updateTestIds', []);
+          this.$store.commit('updateSolutions', []);
+        }
+      })
     },
     generateTest(){
       const testQuestions = this.project.stages

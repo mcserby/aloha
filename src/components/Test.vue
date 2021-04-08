@@ -1,6 +1,7 @@
 <template>
   <PopUp></PopUp>
   <Toast></Toast>
+  <ContextMenu :global="false" ref="menu"/>
   <Dialog :style="{width: '600px'}"
           :dismissableMask="false"
           :modal="true"
@@ -13,9 +14,9 @@
       <Button label="Okay" icon="pi pi-check-circle" @click="hidePrivacyModal" class="p-button-text"/>
     </template>
   </Dialog>
-  <div class="base-container">
+  <div class="base-container test-container" @contextmenu="handleContextMenu" oncopy="return false" onpaste="return false">
     <div class="header-container">
-      <PageHeader :title="'Test ' + testId" :remaining-time="remainingTime"></PageHeader>
+      <PageHeader :title="'Test'" :remaining-time="remainingTime"></PageHeader>
       <p id="hint-display">.</p>
     </div>
     <div class="test-header-container">
@@ -36,7 +37,7 @@
       <div class="radio-preferences">
         <h2 class="preferences-title">Technology Preferences</h2>
         <p class="faded-description">
-          1: Least Preferable <i class="pi pi-minus"></i> 5: Most Preferable
+          1: Least Desirable <i class="pi pi-minus"></i> 5: Most Desirable
         </p>
         <div class="preference-cards">
           <RadioPreference v-for="topic in topics" v-bind:key="topic" v-on:changePreference="updatePreference($event)" :value="topic.value" :for-technology="topic.technology" :disableEditing="false"/>
@@ -283,13 +284,16 @@ export default {
       if (this.isTestRoute) {
         this.$confirm.require({
           target: document.getElementById('hint-display'),
-          message: `➡ Save your progress by using CTRL+S \n➡ The test is submitted automatically if your time is up ➡ You can start your test after you fill in your name and your email ➡ Make sure to choose your favourite technologies`,
+          message: `➡ Save your progress by using CTRL+S \n➡ The test is submitted automatically if your time is up ‏ ‏ ‏ ‏ ‏ ‎ ‎ ‏ ‏ ‎ ‎ ‏ ‏ ‎ ‎   ‏ ‏ ‎ ‎‏  ‏     ‎ ‎  ‏ ‎ ‎ ‏ ‏ ‎ ‎  ‎ ‎ ‏ ‏   ‎ ‎  ‏ ‏ ‎ ‎ ➡ You can start your test after you fill in your name and your email  ‏ ‏ ‎ ‎ ‏ ‏ ‎ ‎ ‏ ‏ ‎ ‎‏ ‏  ‎ ‎ ‏ ‏  ‎ ‎   ‏ ‎ ‎ ‏ ‏ ‎‎ ➡ Make sure to choose your favourite technology (5 - most desirable, 1 - least desirable).`,
           acceptLabel: 'Got It',
           rejectClass: 'disabled-reject',
           acceptClass: 'primary-btn'
         })
       }
     },
+    handleContextMenu(event) {
+      this.$refs.menu.show(event)
+    }
   }
 }
 </script>
@@ -335,6 +339,13 @@ export default {
 
   .test-header-container {
     width: 100%;
+  }
+
+  .test-container {
+    user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-user-select: none !important;
   }
 
   .start-test {
