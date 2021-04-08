@@ -149,3 +149,9 @@ textarea {
 .p-confirm-popup {
     z-index: 9999;
 }
+
+.privacy-dialog .p-dialog-header {
+    color: #00C2FF !important;
+    display: flex !important;
+    justify-content: center !important;
+}
