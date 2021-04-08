@@ -14,6 +14,7 @@ import RadioButton from 'primevue/radiobutton';
 import ConfirmationService from 'primevue/confirmationservice';
 import Chips from 'primevue/chips';
 import Calendar from 'primevue/calendar';
+import ContextMenu from 'primevue/contextmenu';
 import { Field, Form } from 'vee-validate';
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
@@ -45,4 +46,5 @@ app.component('Form', Form);
 app.component('Field', Field);
 app.component('Calendar', Calendar);
 app.component('PopUp', ConfirmPopup);
-app.component('Toast', Toast)
+app.component('Toast', Toast);
+app.component('ContextMenu', ContextMenu);
