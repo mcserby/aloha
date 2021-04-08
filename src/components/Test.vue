@@ -6,6 +6,7 @@
   <Dialog :style="{width: '600px'}"
           :dismissableMask="false"
           :modal="true"
+          class="privacy-dialog"
           v-model:visible="privacyModalVisible"
           :closable="false"
           :closeOnEscape="false"

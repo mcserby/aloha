@@ -1,7 +1,7 @@
 <template>
   <div class="question-container">
     <div class="question-area">
-      <h3>Q({{question.points}}p): </h3>
+      <h3>Question:</h3>
       <p><vue3-markdown-it :source='question.text' /></p>
     </div>
     <div>
