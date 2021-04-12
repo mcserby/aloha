@@ -6,7 +6,10 @@
         <h4>{{project.name}}</h4>
         <Button @click="selectProject(project.id)" class="primary-btn start-button" label="Start Now"></Button>
       </div>
-      <div v-if="isLoggedIn" @click="addNewProject()" class="project-card new-project">
+      <div v-if="projects.length === 0">
+        You are not added as a contributor to any project.
+      </div>
+      <div v-if="isLoggedIn && hasAdminRights" @click="addNewProject()" class="project-card new-project">
         <i class="pi pi-plus-circle"></i>
         New Project
       </div>
@@ -27,6 +30,9 @@ export default {
     isLoggedIn(){
       return this.$store.state.isLoggedIn;
     },
+    hasAdminRights(){
+      return this.$store.state.hasAdminRights;
+    }
   },
   methods: {
     selectProject(projectId){

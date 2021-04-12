@@ -37,17 +37,13 @@ export default {
   },
 
   loadUserProjects: async function(){
-    try {
-      const db = firebase.firestore();
-      const projects = await db.collection("projects")
-        .where("owners", "array-contains", firebase.auth().currentUser.email)
-        .get();
-      const results = [];
-      projects.forEach(p => results.push({id: p.id, ...p.data()}));
-      return results;
-    } catch(e){
-      console.error(e);
-    }
+    const db = firebase.firestore();
+    const projects = await db.collection("projects")
+      .where("owners", "array-contains", firebase.auth().currentUser.email)
+      .get();
+    const results = [];
+    projects.forEach(p => results.push({id: p.id, ...p.data()}));
+    return results;
   },
 
   addProject: async function(projectName, topics){
