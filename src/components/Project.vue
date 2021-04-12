@@ -16,7 +16,7 @@
     <div class="test-actions">
       <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject($event)">Delete Project</Button>
       <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
-      <Button :disabled="stages[0]?.questions.length < 1" class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <Button :disabled="noQuestionsInTest" class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
       <Button class="rnd-btn test-action-button" @click="displayTopicEditor = !displayTopicEditor">Topic Editor</Button>
       <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
                    v-if="projectIsLoaded">
@@ -95,6 +95,7 @@ export default {
   },
   mounted(){
     this.testDuration = this.projectTestDuration;
+    this.loadSolutions(this.project.id);
   },
   components: {
     PageHeader,
@@ -105,6 +106,7 @@ export default {
   watch: {
     projectIsLoaded(newProjectIsLoaded){
       if(newProjectIsLoaded){
+        console.log('project is loaded');
         this.testDuration = this.project.testDuration || 125;
       }
     },
@@ -140,9 +142,17 @@ export default {
       const selectedStageId = this.$store.state.selectedStageId;
       const selectedStageIndex = Math.max(0, this.stages.findIndex(s => s.id == selectedStageId));
       return this.stages[selectedStageIndex]
-    }
+    },
+    noQuestionsInTest(){
+      return this.stages[0]?.questions.length < 1;
+    },
   },
   methods: {
+    async loadSolutions(projectId) {
+      console.log('loading solutions for ' + this.project.name);
+      const solutions = await firebaseService.loadSolutions(projectId);
+      this.$store.commit('updateSolutions', solutions);
+    },
     deleteProject(event) {
       this.$confirm.require({
         target: event.currentTarget,

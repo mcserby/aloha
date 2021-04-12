@@ -299,7 +299,6 @@ export default {
       }
     },
     startMonitorOutOfFocusEvent(){
-      console.log('adding out of focus events');
       this._blurHandler = () => {
         this.leaveTime = new Date();
       };
