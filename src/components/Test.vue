@@ -62,15 +62,15 @@
       <div class="name-inputs">
         <div class="form-group">
           <label>First Name</label>
-          <Input type="text" v-model="firstName"/>
+          <Input :disabled="testStarted" type="text" v-model="firstName"/>
         </div>
         <div class="form-group">
           <label>Last Name</label>
-          <Input type="text" v-model="secondName"/>
+          <Input :disabled="testStarted" type="text" v-model="secondName"/>
         </div>
         <div class="form-group">
           <label>Email</label>
-          <Input type="text" v-model="email"/>
+          <Input :disabled="testStarted" type="text" v-model="email"/>
         </div>
       </div>
       <div class="radio-preferences">
@@ -138,7 +138,7 @@ export default {
       return this.testStarted || !this.mandatoryDataFilled;
     },
     mandatoryDataFilled() {
-      return this.firstName && this.secondName && this.email;
+      return this.firstName && this.secondName && this.validateEmail(this.email);
     },
     testIsEditable() {
       return this.testStarted && !this.testCompleted;
@@ -334,6 +334,10 @@ export default {
     },
     handleContextMenu(event) {
       this.$refs.menu.show(event)
+    },
+    validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
     }
   }
 }
