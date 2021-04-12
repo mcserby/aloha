@@ -198,11 +198,11 @@ export default {
         if(this.kickOffDate > new Date().getTime()){
           this.$router.push({name: 'BeforeKickOffDate',  params: {'kickOffDate': this.kickOffDate}});
         }
-        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate)){
+        const solution = await firebaseService.loadSolution(testId);
+        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate) && !solution){
           this.$router.push({name: 'EvaluationOver'});
           return;
         }
-        const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
         this.initialTotalTime = this.test.testDuration * 60;
         this.totalTimeInSeconds = this.initialTotalTime;
