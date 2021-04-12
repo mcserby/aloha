@@ -118,3 +118,40 @@ textarea {
 .p-invalid {
     border: 1px solid #ff4747 !important;
 }
+
+.p-confirm-popup.p-component {
+    min-width: 350px !important;
+    max-width: 350px !important;
+    word-break: break-word;
+    background-color: #232931;
+    border: 1px solid #4ECCA3;
+    border-radius: 15px;
+}
+
+.p-dialog .p-dialog-footer {
+    background: #232931 !important;
+}
+
+
+.p-dialog-mask.p-component-overlay {
+    background-color: rgba(0,0,0,0.85) !important;
+}
+
+.prism-editor__textarea:focus {
+    box-shadow: none;
+}
+
+.p-contextmenu {
+    opacity: 0 !important;
+    width: 1px !important;
+}
+
+.p-confirm-popup {
+    z-index: 9999;
+}
+
+.privacy-dialog .p-dialog-header {
+    color: #00C2FF !important;
+    display: flex !important;
+    justify-content: center !important;
+}

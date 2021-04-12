@@ -23,9 +23,12 @@ export default {
     async loadProjects(){
       try {
         const projects = await firebaseService.loadUserProjects();
+        this.$store.commit('addAdminRights');
         projects.forEach(p => this.$store.commit('addProject', p));
       } catch(e){
-        console.error(e);
+        if(e.code == "permission-denied"){
+          this.$store.commit('revokeAdminRights');
+        }
       }
     },
     onAuthStateChange(user){

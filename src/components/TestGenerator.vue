@@ -5,13 +5,17 @@
       <Input class="tests-input" type="text" v-model="numberOfTests" />
     </div>
     <div>
+      <h4>Kickoff date:</h4>
+      <Calendar v-model="kickOffDate" showTime :minDate="currentTime()" />
+    </div>
+    <div>
       <h4>Expiration date:</h4>
       <Calendar v-model="expirationDate" showTime :minDate="currentTime()" />
     </div>
-    <div>
+    <div class="generator-actions">
       <Button class="test-generator-button" @click="generateTests()">Generate Tests</Button>
-      <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject()">Clear all tests and solutions</Button>
-      <a :href="blobUrl" text="download tests" download>download tests</a>
+      <Button class="test-generator-button" @click="clearTestsAndSolutionsForProject($event)">Clear all tests and solutions</Button>
+      <a class="texts-download" :href="blobUrl" text="Download Tests" download>Download Tests</a>
     </div>
     <div class="generated-tests">
       <div>Generated Tests:</div>
@@ -36,6 +40,7 @@ export default {
     return {
       numberOfTests: 1,
       expirationDate: new Date(new Date().getTime() + 48*60*60000),
+      kickOffDate: new Date(),
       blobUrl: null,
     }
   },
@@ -82,10 +87,20 @@ export default {
       const testIds = await firebaseService.loadTestIds(this.project.id);
       this.$store.commit('updateTestIds', testIds);
     },
-    async clearTestsAndSolutionsForProject(){
-      await firebaseService.clearTestsAndSolutionsForProject(this.project.id);
-      this.$store.commit('updateTestIds', []);
-      this.$store.commit('updateSolutions', []);
+    async clearTestsAndSolutionsForProject(event){
+      await this.$confirm.require({
+        target: event.currentTarget,
+        message: 'WARNING! This will delete all the tests and solutions, are you sure you want to continue?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Delete',
+        acceptClass: 'confirm-delete',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          firebaseService.clearTestsAndSolutionsForProject(this.project.id);
+          this.$store.commit('updateTestIds', []);
+          this.$store.commit('updateSolutions', []);
+        }
+      })
     },
     generateTest(){
       const testQuestions = this.project.stages
@@ -109,6 +124,7 @@ export default {
         projectName: this.project.name,
         testDuration: this.project.testDuration,
         expirationDate: this.expirationDate.getTime(),
+        kickOffDate: this.kickOffDate.getTime(),
         questions: testQuestions,
         topics: topics,
       }
@@ -126,10 +142,20 @@ export default {
     overflow-y: auto;
   }
 
+  .generator-actions {
+    margin: 1em 0;
+    display: flex;
+    align-items: center;
+  }
+
   .test-generator-button {
     margin-right: 1em;
-    margin-bottom: 1em;
     border-radius: 15px;
+  }
+
+  .texts-download {
+    color: #fff;
+    text-decoration: #4ECCA3 underline;
   }
 
   .tests-input {

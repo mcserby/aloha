@@ -5,6 +5,7 @@ const store = createStore({
         return {
             isLoggedIn: false,
             userName: null,
+            hasAdminRights: false,
             projects: [],
             selectedStageId: null,
             testIds: [],
@@ -16,6 +17,12 @@ const store = createStore({
         loginUser(state, user) {
             state.isLoggedIn = true;
             state.userName = user.displayName;
+        },
+        addAdminRights(state){
+          state.hasAdminRights = true;
+        },
+        revokeAdminRights(state){
+          state.hasAdminRights = false;
         },
         logout(state) {
             state.isLoggedIn = false;

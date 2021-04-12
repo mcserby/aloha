@@ -1,4 +1,5 @@
 <template>
+  <PopUp></PopUp>
   <div class="base-container">
     <div>
       Project Id: {{ project.id }}
@@ -13,9 +14,9 @@
     </div>
 
     <div class="test-actions">
-      <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject()">Delete Project</Button>
+      <Button class="rnd-btn test-action-button p-button-danger" @click="deleteProject($event)">Delete Project</Button>
       <Button class="rnd-btn test-action-button" @click="displayContributors = !displayContributors">Contributors</Button>
-      <Button :disabled="stages[0]?.questions.length < 1" class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
+      <Button :disabled="noQuestionsInTest" class="rnd-btn test-action-button" @click="displayTestGenerator = !displayTestGenerator">Test Generator</Button>
       <Button class="rnd-btn test-action-button" @click="displayTopicEditor = !displayTopicEditor">Topic Editor</Button>
       <router-link class="solution-button" :to="{name: 'Solutions', params: {'projectId': this.project.id}}"
                    v-if="projectIsLoaded">
@@ -94,6 +95,7 @@ export default {
   },
   mounted(){
     this.testDuration = this.projectTestDuration;
+    this.loadSolutions(this.project.id);
   },
   components: {
     PageHeader,
@@ -104,6 +106,7 @@ export default {
   watch: {
     projectIsLoaded(newProjectIsLoaded){
       if(newProjectIsLoaded){
+        console.log('project is loaded');
         this.testDuration = this.project.testDuration || 125;
       }
     },
@@ -139,14 +142,32 @@ export default {
       const selectedStageId = this.$store.state.selectedStageId;
       const selectedStageIndex = Math.max(0, this.stages.findIndex(s => s.id == selectedStageId));
       return this.stages[selectedStageIndex]
-    }
+    },
+    noQuestionsInTest(){
+      return this.stages[0]?.questions.length < 1;
+    },
   },
   methods: {
-    deleteProject() {
-      const projId = this.project.id;
-      firebaseService.deleteProject(projId);
-      this.$router.push({name: 'Main'});
-      this.$store.commit('deleteProject', projId);
+    async loadSolutions(projectId) {
+      console.log('loading solutions for ' + this.project.name);
+      const solutions = await firebaseService.loadSolutions(projectId);
+      this.$store.commit('updateSolutions', solutions);
+    },
+    deleteProject(event) {
+      this.$confirm.require({
+        target: event.currentTarget,
+        message: 'WARNING! This will delete the project, are you sure you want to continue?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Delete',
+        acceptClass: 'confirm-delete',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          const projId = this.project.id;
+          firebaseService.deleteProject(projId);
+          this.$router.push({name: 'Main'});
+          this.$store.commit('deleteProject', projId);
+        }
+      })
     },
     selectStage(stage) {
       this.$store.commit('selectStage', stage.id);
@@ -245,7 +266,8 @@ export default {
   margin-right: 1em !important;
   margin-top: .5em !important;
   width: 155px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .stage-container {
@@ -293,6 +315,13 @@ export default {
 .solution-button {
   width: 200px;
   margin-top: .5em;
+}
+
+.confirm-delete {
+  background: #ff4747 !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 600 !important;
 }
 
 </style>

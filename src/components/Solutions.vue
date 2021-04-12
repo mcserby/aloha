@@ -9,7 +9,7 @@
           <router-link class="submited-by" :to="{ name: 'Solution', params: { solutionId: solution.id }}">Solution:
             {{ solution.firstName }} {{ solution.secondName }} <i class="pi pi-arrow-right"></i>
           </router-link>
-          <p>{{ percentageOfCompletedQuestions(solution) }}% completed</p>
+          <p> <span :class="percentageOfCompletedQuestions(solution)<100?'solution-not-completed': ''">{{ percentageOfCompletedQuestions(solution) }}% completed </span>, Total Score: <span class="score-number">{{totalScore(solution)}} </span></p>
         </div>
     </div>
   </div>
@@ -17,7 +17,6 @@
 
 <script>
 
-import firebaseService from '../services/firebaseService';
 import PageHeader from "@/components/PageHeader";
 
 export default {
@@ -26,7 +25,6 @@ export default {
     return {}
   },
   mounted() {
-    this.loadSolutions(this.projectId);
   },
   components: {PageHeader},
   computed: {
@@ -38,20 +36,20 @@ export default {
     }
   },
   methods: {
-    async loadSolutions(projectId) {
-      if (this.solutions.length === 0) {
-        console.log('loading solutions...');
-        const solutions = await firebaseService.loadSolutions(projectId);
-        this.$store.commit('updateSolutions', solutions);
-      }
-    },
     percentageOfCompletedQuestions(solution) {
       const questions = solution.questions || [];
       if (questions.length === 0) {
         return 0;
       }
       return parseFloat(100 * questions.filter(q => q.score > -1).length / questions.length).toFixed(2);
-    }
+    },
+    totalScore(solution){
+      const questions = solution.questions || [];
+      if (questions.length === 0) {
+        return 0;
+      }
+      return questions.filter(q => q.score > -1).map(q => q.score).reduce((a, b) => a + b, 0);
+    },
   }
 }
 </script>
@@ -93,6 +91,13 @@ export default {
         transition: .2s ease;
       }
     }
+  }
+
+  .score-number {
+    color: #45ff4b;
+  }
+  .solution-not-completed {
+    color: #ab2b2b;
   }
 
   .evaluated-submission {

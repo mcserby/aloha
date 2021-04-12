@@ -7,6 +7,7 @@ import ThankYou from "@/components/ThankYou.vue";
 import Solutions from "@/components/Solutions.vue";
 import Solution from "@/components/Solution.vue";
 import EvaluationOver from "@/components/EvaluationOver.vue";
+import BeforeKickOffDate from "@/components/BeforeKickOffDate.vue";
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: "/evaluationover",
     name: "EvaluationOver",
     component: EvaluationOver,
+  },
+  {
+    path: "/beforekickoffdate/:kickOffDate",
+    name: "BeforeKickOffDate",
+    component: BeforeKickOffDate,
   },
 ];
 
