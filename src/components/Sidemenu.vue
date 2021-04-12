@@ -1,6 +1,6 @@
 <template>
   <div class="sidemenu-container">
-    <div class="sidemenu-logo">
+    <div @click="$router.push({name: 'Main'})" class="sidemenu-logo">
       <img class="logo" src="../assets/accesaig.svg" alt="logo" />
     </div>
     <div class="sidemenu-items" :class="isTestRoute ? 'sidemenu-test' : ''">

@@ -420,8 +420,8 @@ export default {
   .preference-cards {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-gap: 3em;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-gap: 1em;
   }
 
   .privacy-subsection {
