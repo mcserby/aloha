@@ -62,15 +62,15 @@
       <div class="name-inputs">
         <div class="form-group">
           <label>First Name</label>
-          <Input type="text" v-model="firstName"/>
+          <Input :disabled="testStarted" type="text" v-model="firstName"/>
         </div>
         <div class="form-group">
           <label>Last Name</label>
-          <Input type="text" v-model="secondName"/>
+          <Input :disabled="testStarted" type="text" v-model="secondName"/>
         </div>
         <div class="form-group">
           <label>Email</label>
-          <Input type="text" v-model="email"/>
+          <Input :disabled="testStarted" type="text" v-model="email"/>
         </div>
       </div>
       <div class="radio-preferences">
@@ -119,10 +119,10 @@ export default {
       privacyModalVisible: false
     }
   },
-  mounted() {
-    this.loadTest(this.testId);
+  async mounted() {
+    await this.loadTest(this.testId);
     this.attachCtrlSave();
-    this.displayPrivacyModal();
+    this.displayPrivacyModalIfTestNotStarted();
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this._keyListener);
@@ -138,7 +138,7 @@ export default {
       return this.testStarted || !this.mandatoryDataFilled;
     },
     mandatoryDataFilled() {
-      return this.firstName && this.secondName && this.email;
+      return this.firstName && this.secondName && this.validateEmail(this.email);
     },
     testIsEditable() {
       return this.testStarted && !this.testCompleted;
@@ -198,11 +198,11 @@ export default {
         if(this.kickOffDate > new Date().getTime()){
           this.$router.push({name: 'BeforeKickOffDate',  params: {'kickOffDate': this.kickOffDate}});
         }
-        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate)){
+        const solution = await firebaseService.loadSolution(testId);
+        if(this.expirationDateMissingOrIsExpired(this.test.expirationDate) && !solution){
           this.$router.push({name: 'EvaluationOver'});
           return;
         }
-        const solution = await firebaseService.loadSolution(testId);
         this.questions = this.test.questions;
         this.initialTotalTime = this.test.testDuration * 60;
         this.totalTimeInSeconds = this.initialTotalTime;
@@ -299,7 +299,6 @@ export default {
       }
     },
     startMonitorOutOfFocusEvent(){
-      console.log('adding out of focus events');
       this._blurHandler = () => {
         this.leaveTime = new Date();
       };
@@ -310,8 +309,10 @@ export default {
       window.removeEventListener('blur', this._blurHandler);
       window.removeEventListener('focus', this.focusHandler);
     },
-    displayPrivacyModal() {
-      this.privacyModalVisible = true;
+    displayPrivacyModalIfTestNotStarted() {
+      if(!this.testStarted){
+          this.privacyModalVisible = true;
+      }
     },
     hidePrivacyModal() {
       setTimeout(() => {
@@ -332,6 +333,10 @@ export default {
     },
     handleContextMenu(event) {
       this.$refs.menu.show(event)
+    },
+    validateEmail(email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
     }
   }
 }
@@ -418,8 +423,8 @@ export default {
   .preference-cards {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    grid-gap: 3em;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-gap: 1em;
   }
 
   .privacy-subsection {
