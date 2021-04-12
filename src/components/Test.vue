@@ -119,10 +119,10 @@ export default {
       privacyModalVisible: false
     }
   },
-  mounted() {
-    this.loadTest(this.testId);
+  async mounted() {
+    await this.loadTest(this.testId);
     this.attachCtrlSave();
-    this.displayPrivacyModal();
+    this.displayPrivacyModalIfTestNotStarted();
   },
   beforeUnmount() {
     document.removeEventListener('keydown', this._keyListener);
@@ -310,8 +310,10 @@ export default {
       window.removeEventListener('blur', this._blurHandler);
       window.removeEventListener('focus', this.focusHandler);
     },
-    displayPrivacyModal() {
-      this.privacyModalVisible = true;
+    displayPrivacyModalIfTestNotStarted() {
+      if(!this.testStarted){
+          this.privacyModalVisible = true;
+      }
     },
     hidePrivacyModal() {
       setTimeout(() => {
