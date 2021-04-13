@@ -42,7 +42,10 @@ export default {
       this.$emit('updateQuestion', {
         id: this.question.id,
         text: this.currentText,
-        answer: this.currentAnswer,
+        answer: this.currentAnswer + `
+
+
+        `,
         solution: this.currentSolution
       });
     }
