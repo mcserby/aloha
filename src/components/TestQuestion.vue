@@ -1,11 +1,12 @@
 <template>
   <div class="question-container">
     <div class="question-area">
-      <h3>Question:</h3>
-      <p><vue3-markdown-it :source='question.text' /></p>
+      <h3>Question</h3>
+      <p class="test-question"><vue3-markdown-it :source='question.text' /></p>
     </div>
-    <div>
-      <prism-editor class="answer-area" v-model="answer" ignoreTabKey :highlight="highlighter" line-numbers></prism-editor>
+    <div class="answer-area">
+      <h3>Answer</h3>
+      <prism-editor class="prism-area" v-model="answer" ignoreTabKey :highlight="highlighter" line-numbers></prism-editor>
     </div>
   </div>
 </template>
@@ -51,19 +52,45 @@ export default {
 
 <style scoped lang="scss">
   .question-container {
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
+    background-color: #232931;
+    padding: 1em;
+    border-radius: 15px;
   }
   .question-area {
     display: flex;
-    align-items: center;
+    flex-direction: column;
 
     h3 {
-      margin: 0 .7em 0 0;
+      margin: 0 0 .5em 0;
       color: #4ECCA3;
     }
   }
 
   .answer-area {
-    margin-top: 1em;
+    margin-top: 2em;
+
+    h3 {
+      margin: 0 0 .5em 0;
+      color: #4ECCA3;
+    }
+  }
+
+  .prism-area {
+    border-left: 2px solid #4ECCA3;
+  }
+
+  .test-question {
+    max-width: 100%;
+    word-wrap: anywhere;
+    border-left: 2px solid #4ECCA3;
+    padding-left: .5em;
+
+    div {
+
+      p {
+        word-wrap: anywhere;
+      }
+    }
   }
 </style>
