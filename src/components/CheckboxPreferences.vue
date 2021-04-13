@@ -1,12 +1,13 @@
 <template>
     <div class="checkboxes-container" v-for="(item,index) in options" v-bind:key="index">
         <Checkbox
-                  :id="item.name"
+                  :id="item"
                   :name="options"
                   v-on:focus="setSelectedOptions()"
-                  :value="item.name"
-                  v-model="selectedOptions" />
-        <label class="checkbox-label" v-bind:for="item.name">{{item.name}}</label>
+                  :value="item"
+                  v-model="selectedOptions"
+                  />
+        <label class="checkbox-label" v-bind:for="item">{{item}}</label>
     </div>
 </template>
 
@@ -14,7 +15,8 @@
     export default {
         name: 'CheckboxPreferences',
         props: {
-            options: Array
+            options: Array,
+            selected: Array
         },
         data() {
             return {
@@ -22,11 +24,11 @@
             }
         },
         mounted() {
-            this.selectedOptions = [];
+            this.selectedOptions = this.selected;
         },
         methods: {
             setSelectedOptions() {
-                this.$emit('setSelectedOptions', {selectedOptions: this.selectedOptions})
+                this.$emit('setSelectedOptions',this.selectedOptions);
             }
         }
         }
@@ -37,6 +39,7 @@
     }
 
     .checkbox-label {
-        margin-right: 7px;
+        margin-right: 10px;
+        margin-left: 5px;
     }
 </style>

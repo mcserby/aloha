@@ -100,7 +100,7 @@
     </div>
     <div v-if="testStarted" class="questions">
       <div v-for="question in questions" v-bind:key="question.id">
-        <TestQuestion :question="question" :isEditable="testIsEditable" @update:answer="question.answer = $event"/>
+        <TestQuestion :question="question" :isEditable="testIsEditable" @update:answer="question.answer = $event" @update:currentAnswers="question.answer = $event"/>
       </div>
     </div>
     <Button v-if="!startTestDisabled" :disabled="startTestDisabled" @click="startTest()"
