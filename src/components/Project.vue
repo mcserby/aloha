@@ -26,7 +26,7 @@
     <div class="stage-container">
       <div class="stage-selector-container">
         <StageSelector :stages="stages" @select-stage="selectStage" @save-new-stage="saveNewStage"
-                       @delete-stage="deleteStage"/>
+                       @delete-stage="deleteStage" @update-stage-name-and-points="updateStageNameAndPoints"/>
       </div>
       <div class="stage-editor-container">
         <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion"
@@ -188,6 +188,12 @@ export default {
       }
       const updatedProject = await firebaseService.updateStages(this.project.id, newStages);
       this.$store.commit('updateProject', updatedProject);
+    },
+    async updateStageNameAndPoints(stageNameAndPoints){
+      const currentStageCopy = JSON.parse(JSON.stringify(this.stages.filter(s => s.id == stageNameAndPoints.id)[0]));
+      currentStageCopy.name = stageNameAndPoints.name;
+      currentStageCopy.points = stageNameAndPoints.points;
+      await this.updateStages(currentStageCopy);
     },
     async updateStages(currentStageCopy) {
       const newStages = JSON.parse(JSON.stringify(this.stages));

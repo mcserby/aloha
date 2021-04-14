@@ -72,7 +72,6 @@ export default {
 
   },
   mounted() {
-    console.log(this.percentageOfCompletedQuestions)
   },
   methods: {
     async updateQuestion(question) {
