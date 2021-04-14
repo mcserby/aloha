@@ -39,6 +39,7 @@ const defaultAnswer =  'answer';
 export default {
   name: 'Question',
   props: ['question', 'showSolution'],
+  emits: ['deleteQuestion', 'updateQuestion'],
   data() {
     return {
       currentText: '',
