@@ -3,6 +3,7 @@
     <div class="stage-editor-header">
       <p>Editing Stage: <span class="stage-name">{{ stage.name }}</span></p>
       <Button class="rnd-btn primary-btn" @click="$emit('addNewQuestion')">New Question</Button>
+      <Button class="rnd-btn primary-btn" @click="$emit('addCheckboxQuestion')">Add checkbox Question</Button>
     </div>
     <div class="question-container" v-for="question in stage.questions" v-bind:key="question.id">
       <Question :question="question" @update-question="updateQuestion" @delete-question="deleteQuestion"

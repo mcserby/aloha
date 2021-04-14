@@ -30,6 +30,7 @@
       </div>
       <div class="stage-editor-container">
         <StageEditor v-if="selectedStage" :stage="selectedStage" @add-new-question="addNewQuestion"
+                     @add-checkbox-question="addCheckboxQuestion"
                      @update-question="updatedQuestion" @delete-question="deleteQuestion"/>
       </div>
     </div>
@@ -203,10 +204,23 @@ export default {
         id: uuidv4(),
         text: 'question',
         answer: 'answer',
+        type: 'text',
         solution: 'solution'
       });
       await this.updateStages(currentStageCopy);
     },
+      async addCheckboxQuestion() {
+          const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));
+          currentStageCopy.questions.push({
+              id: uuidv4(),
+              text: 'question',
+              type: 'checkbox',
+              answerOptions: [],
+              solutionOptions: []
+          });
+          await this.updateStages(currentStageCopy);
+      },
+
     async updatedQuestion(question) {
       console.log('updateQuestion', question);
       const currentStageCopy = JSON.parse(JSON.stringify(this.selectedStage));

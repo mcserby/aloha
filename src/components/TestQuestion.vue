@@ -4,10 +4,13 @@
       <h3>Question</h3>
       <p class="test-question"><vue3-markdown-it :source='question.text' /></p>
     </div>
-    <div class="answer-area">
+    <div class="answer-area" v-if="question.type === 'text'">
       <h3>Answer</h3>
       <prism-editor class="prism-area" v-model="answer" ignoreTabKey :highlight="highlighter" line-numbers></prism-editor>
     </div>
+      <div v-if="question.type === 'checkbox'">
+          <CheckboxPreferences :options="question.currentAnswers"  @set-selected-options="setSelectedOptions($event)" />
+      </div>
   </div>
 </template>
 
@@ -20,6 +23,7 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
+import CheckboxPreferences from './CheckboxPreferences';
 
 export default {
   name: 'TestQuestion',
@@ -30,7 +34,8 @@ export default {
     }
   },
   components: {
-    PrismEditor
+    PrismEditor,
+    CheckboxPreferences
   },
   computed: {
     answer: {
@@ -46,6 +51,10 @@ export default {
     highlighter(code) {
       return highlight(code, languages.js);
     },
+      setSelectedOptions(event) {
+        console.log('event', event);
+          this.$emit('update:currentAnswers', event);
+      }
   }
 }
 </script>

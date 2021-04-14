@@ -12,6 +12,7 @@ import Column from 'primevue/column';
 import ConfirmPopup from 'primevue/confirmpopup';
 import RadioButton from 'primevue/radiobutton';
 import ConfirmationService from 'primevue/confirmationservice';
+import Checkbox from 'primevue/checkbox';
 import Chips from 'primevue/chips';
 import Calendar from 'primevue/calendar';
 import ContextMenu from 'primevue/contextmenu';
@@ -41,7 +42,8 @@ app.component('Dialog', Dialog);
 app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Radio', RadioButton);
-app.component('Chips', Chips)
+app.component('Chips', Chips);
+app.component('Checkbox', Checkbox);
 app.component('Form', Form);
 app.component('Field', Field);
 app.component('Calendar', Calendar);
