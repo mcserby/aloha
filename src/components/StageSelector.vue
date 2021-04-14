@@ -1,9 +1,13 @@
 <template>
   <div class="stage-selector">
     Stage Selector
-    <div :class="activeStage === stage.name ? 'active-stage': ''" @click="selectStage(stage)" v-for="stage in stages" v-bind:key="stage.id" class="stage">
-      <div>
-      ({{stage.points || 0}}p) {{stage.name}}
+    <div :class="activeStage === stage.name ? 'active-stage': ''" @click="selectStage(stage)" v-for="stage in sortedStagesByName" v-bind:key="stage.id" class="stage">
+      <div v-if="activeStage !== stage.name">
+        ({{stage.points || 0}}p) {{stage.name}}
+      </div>
+      <div v-if="activeStage == stage.name">
+        <Input type="text" size="3" v-model="currentStagePoints"  @change="updateCurrentStagePoints()" />p 
+        <Input type="text" v-model="currentStageName" @change="updateCurrentStageName()"/>
       </div>
       <div>
         <Button class="rnd-btn" @click="deleteStage(stage)" icon="pi pi-times"></Button>
@@ -33,12 +37,19 @@ export default {
     return {
       newStageEditMode: false,
       newStageName: '',
+      activeStageId: null,
       activeStage: '',
+      currentStageName: '',
+      currentStagePoints: 0,
       newStagePoints: 10,
     }
   },
   components: {},
-  computed: {},
+  computed: {
+    sortedStagesByName(){
+      return [...this.stages].sort((s1, s2) => s1.name.localeCompare(s2.name));
+    }
+  },
   methods: {
     enableNewStage() {
       this.newStageEditMode = true;
@@ -56,10 +67,28 @@ export default {
     },
     selectStage(stage) {
       this.$emit('selectStage', stage);
+      this.activeStageId = stage.id;
       this.activeStage = stage.name;
+      this.currentStageName = stage.name;
+      this.currentStagePoints = stage.points;
     },
     deleteStage(stage) {
       this.$emit('deleteStage', stage);
+    },
+    updateCurrentStageName(){
+      console.log('this.activeStageId', this.activeStageId);
+      this.$emit('updateStageNameAndPoints', {
+        id: this.activeStageId,
+        name: this.currentStageName,
+        points: parseInt(this.currentStagePoints),
+      });
+    },
+    updateCurrentStagePoints(){
+      this.$emit('updateStageNameAndPoints', {
+        id: this.activeStageId,
+        name: this.currentStageName,
+        points: parseInt(this.currentStagePoints),
+      });
     }
   }
 }

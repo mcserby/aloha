@@ -103,7 +103,8 @@ export default {
       })
     },
     generateTest(){
-      const testQuestions = this.project.stages
+      const testQuestions = [...this.project.stages]
+        .sort((s1, s2) => s1.name.localeCompare(s2.name))
         .filter(stage => stage.questions.length > 0)
         .map(s => {
           const pos = this.getRandomInt(s.questions.length);
