@@ -4,11 +4,11 @@
       <h3>Question</h3>
       <p class="test-question"><vue3-markdown-it :source='question.text' /></p>
     </div>
-    <div class="answer-area" v-if="question.type === 'text'">
+    <div class="answer-area" v-if="questionType === 'text'">
       <h3>Answer</h3>
       <prism-editor class="prism-area" v-model="answer" ignoreTabKey :highlight="highlighter" line-numbers></prism-editor>
     </div>
-      <div v-if="question.type === 'checkbox'">
+      <div v-if="questionType === 'checkbox'">
           <CheckboxPreferences :options="question.currentAnswers"  @set-selected-options="setSelectedOptions($event)" />
       </div>
   </div>
@@ -38,6 +38,9 @@ export default {
     CheckboxPreferences
   },
   computed: {
+    questionType(){
+      return this.question.type || 'text';
+    },
     answer: {
       get() {
          return this.question.answer;
@@ -52,8 +55,7 @@ export default {
       return highlight(code, languages.js);
     },
       setSelectedOptions(event) {
-        console.log('event', event);
-          this.$emit('update:currentAnswers', event);
+        this.$emit('update:currentAnswers', event);
       }
   }
 }
