@@ -274,13 +274,7 @@ export default {
     },
     constructSolution() {
       const questionsCopy = JSON.parse(JSON.stringify(this.questions));
-      const newQuestions = questionsCopy.map(q => new Object({
-        id: q.id,
-        text: q.text,
-        answer: q.answer,
-        points: q.points,
-        score: -1
-      }));
+      const newQuestions = questionsCopy.map(q => new Object({...q, score: -1}));
       return new Object({
         testId: this.test.id,
         questions: newQuestions
