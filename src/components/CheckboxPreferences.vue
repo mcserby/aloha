@@ -36,7 +36,7 @@
 </script>
 <style scoped lang="scss">
     .checkboxes-container {
-        display: inline;
+        display: block;
     }
 
     .checkbox-label {

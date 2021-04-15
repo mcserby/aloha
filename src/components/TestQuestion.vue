@@ -43,7 +43,10 @@ export default {
     },
     answer: {
       get() {
-         return this.question.answer;
+         return this.question.answer || `answer
+
+
+         `;
        },
        set(value) {
          this.$emit('update:answer', value);
