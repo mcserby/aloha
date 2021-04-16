@@ -267,7 +267,6 @@ export default {
     },
     updateTimer() {
       this.totalTimeInSeconds = this.totalTimeInSeconds - 1;
-      console.log('this.totalTimeInSeconds', this.totalTimeInSeconds);
       if (this.totalTimeInSeconds < 1) {
         console.log('time is out. Solution will be submitted automatically');
         this.submitSolutionAutomatically();
@@ -292,7 +291,6 @@ export default {
       }
     },
     async submitSolution(event) {
-      console.log(event);
       await this.$confirm.require({
         target: event.currentTarget,
         message: 'Once you submit your answers, you cannot access your test again, are you sure?',
