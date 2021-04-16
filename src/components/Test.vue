@@ -267,9 +267,10 @@ export default {
     },
     updateTimer() {
       this.totalTimeInSeconds = this.totalTimeInSeconds - 1;
+      console.log('this.totalTimeInSeconds', this.totalTimeInSeconds);
       if (this.totalTimeInSeconds < 1) {
         console.log('time is out. Solution will be submitted automatically');
-        this.submitSolution();
+        this.submitSolutionAutomatically();
       }
     },
     constructSolution() {
@@ -291,6 +292,7 @@ export default {
       }
     },
     async submitSolution(event) {
+      console.log(event);
       await this.$confirm.require({
         target: event.currentTarget,
         message: 'Once you submit your answers, you cannot access your test again, are you sure?',
@@ -299,13 +301,16 @@ export default {
         acceptClass: 'primary-btn',
         rejectLabel: 'Cancel',
         accept: () => {
-          const solution = this.constructSolution();
-          firebaseService.submitSolution(solution);
-          clearInterval(this.timerInterval);
-          this.stopMonitorOutOfFocusEvent();
-          this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
+          this.submitSolutionAutomatically();
         }
       })
+    },
+    async submitSolutionAutomatically(){
+      const solution = this.constructSolution();
+      firebaseService.submitSolution(solution);
+      clearInterval(this.timerInterval);
+      this.stopMonitorOutOfFocusEvent();
+      this.$router.push({name: 'ThankYou', params: {'firstName': this.firstName || 'John Doe'}});
     },
     focusHandler() {
       const timeGone = new Date() - this.leaveTime;
