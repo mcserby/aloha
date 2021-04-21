@@ -1,6 +1,9 @@
 <template>
   <div class="base-container">
     <PageHeader :title="'Solutions for ' + projectId"></PageHeader>
+    <div>
+      <a class="solutions-download" :href="blobUrl" text="Download Solutions Report" download>Download solutions report</a>
+    </div>
     <div v-if="solutions.length === 0">
       No solution has been submitted yet
     </div>
@@ -22,9 +25,12 @@ import PageHeader from "@/components/PageHeader";
 export default {
   name: 'Solutions',
   data() {
-    return {}
+    return {
+      blobUrl: null
+    }
   },
   mounted() {
+    this.createSolutionsReport();
   },
   components: {PageHeader},
   computed: {
@@ -36,6 +42,14 @@ export default {
     }
   },
   methods: {
+    createSolutionsReport(){
+      const ss = this.solutions.map(s => "" + s.firstName + "_" + s.secondName + "," + s.email + "," + this.topicsString(s.topics) + "," + this.percentageOfCompletedQuestions(s) + "," + this.totalScore(s)).join("\n");
+      const blob = new Blob([ss], {type: 'text/csv'});
+      this.blobUrl = URL.createObjectURL(blob);
+    },
+    topicsString(topics){
+      return topics.map(t => "" + t.technology + "," + t.value).join(",");
+    },
     percentageOfCompletedQuestions(solution) {
       const questions = solution.questions || [];
       if (questions.length === 0) {
@@ -91,6 +105,11 @@ export default {
         transition: .2s ease;
       }
     }
+  }
+
+  .solutions-download {
+    color: #fff;
+    text-decoration: #4ECCA3 underline;
   }
 
   .score-number {
