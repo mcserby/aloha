@@ -2,7 +2,8 @@
   <div class="questions-wrapper">
     <div class="question" :class="score !== -1 ? 'corrected-question': ''">
       <h4>Q ({{question.points}}p): <vue3-markdown-it :source='question.text' /></h4>
-      <p class="answer">A: {{question.answer}}</p>
+      <p v-if="question.type === 'checkbox'" class="answer">A: {{question.answer}}</p>
+      <prism-editor v-else class="prism-area" v-model="answer" ignoreTabKey :highlight="highlighter"></prism-editor>
       <p class="q-score"><span></span><Input v-model="score" @change="updateQuestion()"/></p>
     </div>
   </div>
@@ -10,16 +11,25 @@
 
 <script>
 
+import { PrismEditor } from 'vue-prism-editor';
+import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles somewhere
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism-tomorrow.css';
+import { highlight, languages } from 'prismjs/components/prism-core';
+
 export default {
   name: 'SolutionQuestion',
   props: ['question', 'initialScore'],
   data() {
     return {
-      score: -1
+      score: -1,
+      answer: ''
     }
   },
   mounted(){
     this.score = this.initialScore;
+    this.answer = this.question.answer;
   },
   watch: {
     initialScore(newval) {
@@ -27,6 +37,7 @@ export default {
     }
   },
   components: {
+    PrismEditor
   },
   computed: {
   },
@@ -41,6 +52,9 @@ export default {
       const question = JSON.parse(JSON.stringify(this.question));
       question.score = parseInt(this.score);
       this.$emit('updateQuestion', question);
+    },
+    highlighter(code) {
+      return highlight(code, languages.js);
     }
   }
 }
